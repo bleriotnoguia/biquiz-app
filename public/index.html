@@ -24,8 +24,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   </head>
 
-  <body>
+  <body onload="loadApp()">
     <div id="root"></div>
   </body>
+  <script>
+    // Called when the app loads
+    function loadApp() {
+      if(("isDarkMode" in localStorage) && JSON.parse(localStorage.isDarkMode)){
+        document.body.classList.toggle('dark')
+      }
+    }
+  </script>
 
 </html>

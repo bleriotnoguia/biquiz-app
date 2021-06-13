@@ -3,6 +3,12 @@ import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
 import Page from './pages/Page';
+import Settings from './pages/Settings';
+import About from './pages/About';
+import Quiz from './pages/Quiz';
+import Home from './pages/Home';
+import Result from './pages/Result';
+import Answers from './pages/Answers';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -22,8 +28,11 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Games from './pages/Games';
+import GameDetails from './pages/GameDetails';
 
 const App: React.FC = () => {
+
   return (
     <IonApp>
       <IonReactRouter>
@@ -31,11 +40,32 @@ const App: React.FC = () => {
           <Menu />
           <IonRouterOutlet id="main">
             <Route path="/" exact={true}>
-              <Redirect to="/page/Inbox" />
+              <Home />
             </Route>
-            <Route path="/page/:name" exact={true}>
+            <Route path="/page/settings">
+              <Settings />
+            </Route>
+            <Route path="/page/about">
+              <About />
+            </Route>
+            <Route path="/page/quiz">
+              <Quiz />
+            </Route>
+            <Route path="/page/result">
+              <Result />
+            </Route>
+            <Route path="/page/answers">
+              <Answers />
+            </Route>
+            <Route path="/page/games">
+              <Games />
+            </Route>
+            <Route path="/page/gamedetails/:name">
+              <GameDetails />
+            </Route>
+            {/* <Route path="/page/:name" exact={true}>
               <Page />
-            </Route>
+            </Route> */}
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
