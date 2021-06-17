@@ -10,6 +10,9 @@ import Home from './pages/Home';
 import Result from './pages/Result';
 import Answers from './pages/Answers';
 
+import { useIonRouter } from '@ionic/react';
+import { App as MyApp } from '@capacitor/app';
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -30,8 +33,20 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Games from './pages/Games';
 import GameDetails from './pages/GameDetails';
+import {useEffect} from 'react'
+
 
 const App: React.FC = () => {
+
+const ionRouter = useIonRouter();
+
+useEffect(() => {
+  // MyApp.addListener('backButton', () => {
+  //   if (!ionRouter.canGoBack()) {
+  //     MyApp.exitApp();
+  //   }
+  // });
+}, [])
 
   return (
     <IonApp>
@@ -60,7 +75,7 @@ const App: React.FC = () => {
             <Route path="/page/games">
               <Games />
             </Route>
-            <Route path="/page/gamedetails/:name">
+            <Route path="/page/game/:id">
               <GameDetails />
             </Route>
             {/* <Route path="/page/:name" exact={true}>

@@ -13,12 +13,18 @@ import {
 import { useLocation } from 'react-router-dom';
 import { alertCircleSharp, alertCircleOutline, settingsOutline, settingsSharp, sparklesOutline, sparklesSharp, shareOutline, shareSharp, powerOutline, powerSharp, shareSocialOutline, shareSocialSharp, homeOutline, homeSharp } from 'ionicons/icons';
 import './Menu.css';
+import {SocialSharing} from '@ionic-native/social-sharing'
+import { App } from '@capacitor/app';
 
 interface AppPage {
   url: string;
   iosIcon: string;
   mdIcon: string;
   title: string;
+}
+
+const shareApp = () => {
+  SocialSharing.share("J'ai utilisé cette application et je pense que toi aussi tu l'apprécieras", "Merci d'installer cette application", "", "biquiz.bleriotnoguia.com")
 }
 
 const appPages: AppPage[] = [
@@ -41,26 +47,15 @@ const appPages: AppPage[] = [
     mdIcon: settingsSharp
   },
   {
-    title: 'Partager',
-    url: '/page/Share',
-    iosIcon: shareSocialOutline,
-    mdIcon: shareSocialSharp
-  },
-  {
     title: 'Autres jeux',
     url: '/page/Games',
     iosIcon: sparklesOutline,
     mdIcon: sparklesSharp
-  },
-  {
-    title: 'Quitter',
-    url: '/page/Quit',
-    iosIcon: powerOutline,
-    mdIcon: powerSharp
   }
 ];
 
 const Menu: React.FC = () => {
+
   const location = useLocation();
 
   return (
@@ -78,8 +73,19 @@ const Menu: React.FC = () => {
                 </IonItem>
               </IonMenuToggle>
             );
-            //navigator["app"].exitApp()
           })}
+          <IonMenuToggle autoHide={false}>
+            <IonItem className={location.pathname === '/page/Share' ? 'selected' : ''} onClick={() => shareApp()} routerDirection="none" lines="none" detail={false}>
+              <IonIcon slot="start" ios={shareSocialOutline} md={shareSocialSharp} />
+              <IonLabel>Partager</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
+          <IonMenuToggle autoHide={false}>
+            <IonItem className={location.pathname === '/page/Quit' ? 'selected' : ''} onClick={() => App.exitApp()} routerDirection="none" lines="none" detail={false}>
+              <IonIcon slot="start" ios={powerOutline} md={powerSharp} />
+              <IonLabel>Quitter</IonLabel>
+            </IonItem>
+          </IonMenuToggle>
         </IonList>
       </IonContent>
     </IonMenu>
