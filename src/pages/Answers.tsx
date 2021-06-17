@@ -1,9 +1,20 @@
-import { IonBackButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonLabel, IonList, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
-import { checkmarkSharp, closeSharp } from 'ionicons/icons';
-import { useParams } from 'react-router';
+import {useState, useEffect} from 'react'
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { checkboxSharp, checkmarkSharp, closeSharp, stopOutline } from 'ionicons/icons';
+import {answerConfig} from './QuizInterface'
 import './Page.css';
 
 const Answers: React.FC = () => {
+  const [currentQuizzes, setCurrentQuizzes] = useState<any[]>([])
+
+  useEffect(() => {
+    let current = JSON.parse(localStorage.getItem('currentQuizzes')??'[]')
+    let newCurrent = current.map((quiz: any) => {
+      quiz.choice = JSON.parse(localStorage.getItem('currentChoices')??'[]').find((elt:any) => elt.quiz_id === quiz.id).choice
+      return quiz
+    })
+    setCurrentQuizzes(newCurrent)
+  }, [])
 
   return (
     <IonPage>
@@ -23,79 +34,29 @@ const Answers: React.FC = () => {
           </IonText>
         </div>
           <IonItemDivider>
-            <p className="m-0">Score : 15 / 20</p>
+            <p className="m-0">Score : {currentQuizzes.filter((item: any) => item.choice.is_correct).length}/{currentQuizzes.length}</p>
           </IonItemDivider>
         <IonList>
-          <IonItem>
-            <IonIcon icon={checkmarkSharp} slot="end" color="success" />
-            <div>
-              <h3>Quiz 1</h3>
-              <p className="text-dimgray">Lorem ipsum dolor sit amet, consectetur 
-adipiscing elit, sed do eiusmod tempor.</p>
+          {currentQuizzes.map((item, idx) => (
+            <div key={idx}>
+              <IonItem>
+              <IonIcon icon={item.choice.is_correct ? checkmarkSharp : closeSharp} slot="end" color={item.choice.is_correct ? "success" : "danger"} />
+              <div>
+                <h4>Quiz {idx+1}</h4>
+                <p className="text-dimgray">{item.content}</p>
+              </div>
+            </IonItem>
+            {item.answers.map((answer: answerConfig, index:number) => (<IonItem key={index}>
+              <IonIcon slot="start" icon={(answer.is_correct || (item.choice.id === answer.id) ) ? checkboxSharp : stopOutline} color={answer.is_correct ? "success" : (item.choice.id === answer.id) ? "danger" : ""} />
+              <IonLabel color={answer.is_correct ? "success" : (item.choice.id === answer.id) ? "danger" : ""}>
+                {answer.content}  
+              </IonLabel>
+            </IonItem>))}
+            <IonItemDivider>
+              Source: {item.hint} 
+            </IonItemDivider>
             </div>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="primary" />
-            <IonLabel>
-              Choix 1  
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="success" checked={true}/>
-            <IonLabel color="success">
-              Choix 2  
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="danger" checked={true} />
-            <IonLabel color="danger">
-              Choix 3  
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="primary" />
-            <IonLabel>
-              Choix 4  
-            </IonLabel>
-          </IonItem>
-          <IonItemDivider>
-            Source: 1 Lorem 3 : 25 
-          </IonItemDivider>
-          <IonItem>
-            <IonIcon icon={closeSharp} color="danger" slot="end" />
-            <div>
-              <h3>Quiz 2</h3>
-              <p className="text-dimgray">Lorem ipsum dolor sit amet, consectetur 
-adipiscing elit, sed do eiusmod tempor.</p>
-            </div>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="primary" />
-            <IonLabel>
-              Choix 1  
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="success" checked={true}/>
-            <IonLabel color="success">
-              Choix 2  
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="danger" checked={true} />
-            <IonLabel color="danger">
-              Choix 3  
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonCheckbox slot="start" color="primary" />
-            <IonLabel>
-              Choix 4  
-            </IonLabel>
-          </IonItem>
-          <IonItemDivider>
-            Source: 1 Lorem 3 : 25 
-          </IonItemDivider>
+          ))}
         </IonList>
       </IonContent>
     </IonPage>

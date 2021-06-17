@@ -48,7 +48,7 @@ const App: React.FC = () => {
             <Route path="/page/about">
               <About />
             </Route>
-            <Route path="/page/quiz">
+            <Route path="/page/quiz/category/:category_id">
               <Quiz />
             </Route>
             <Route path="/page/result">

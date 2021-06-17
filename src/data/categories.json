@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "hommes"
+  },
+  {
+    "id": 2,
+    "name": "femmes"
+  },
+  {
+    "id": 3,
+    "name": "versets"
+  },
+  {
+    "id": 4,
+    "name": "livres"
+  }
+]
