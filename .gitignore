@@ -10,6 +10,7 @@
 
 # production
 /build
+/android
 
 # misc
 .DS_Store
@@ -26,3 +27,4 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+todo.txt

@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { eyeSharp, refreshSharp, starHalfSharp, starOutline, starSharp } from 'ionicons/icons';
 import {quizConfig, answerConfig} from './QuizInterface'
 import "./Result.css";
@@ -62,8 +62,14 @@ const Result: React.FC = () => {
           <h2>Quiz terminé avec succès</h2>
           <p>Vous avez fait {currentChoices.length} questions et à partir de cela {currentChoices.filter((item: any) => item.choice.is_correct).length} réponse(s) sont correctes dans le quiz</p>
         </div>
-        <IonButton routerLink={`/page/quiz/category/${currentQuizzes.length ? currentQuizzes[0].category_id : ''}`} color="primary"><IonIcon icon={refreshSharp} slot="start" /> Rejouer</IonButton>
-        <IonButton routerLink='/page/answers' color="primary"><IonIcon icon={eyeSharp} slot="start" /> Voir la corrections</IonButton>
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonButton routerLink={`/page/quiz/category/${currentQuizzes.length ? currentQuizzes[0].category_id : ''}`} color="primary"><IonIcon icon={refreshSharp} slot="start" /> Rejouer</IonButton>
+          </IonRow>
+          <IonRow className="ion-justify-content-center">
+            <IonButton routerLink='/page/answers' color="primary"><IonIcon icon={eyeSharp} slot="start" /> Voir la corrections</IonButton>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );
