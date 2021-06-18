@@ -1,5 +1,5 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonText, IonList, IonItem, IonIcon, IonLabel, IonButton, IonRadio, IonRadioGroup, IonListHeader, IonItemDivider, IonGrid, IonRow, IonCol } from '@ionic/react';
-import { bookSharp, personSharp, play, readerSharp } from 'ionicons/icons';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonIcon, IonLabel, IonButton, IonRadio, IonRadioGroup, IonListHeader, IonItemDivider } from '@ionic/react';
+import { bookSharp, play } from 'ionicons/icons';
 import {useState} from 'react'
 import categories from '../data/categories.json'
 import './Page.css';
@@ -14,7 +14,7 @@ const Home: React.FC = () => {
 
   const handleCategorySelected = (category_id: number) => {
     var category_selected = categories.find((item) => item.id == category_id)
-    setCategory(category_selected ?? {id: 1, name: 'homme'})
+    setCategory(category_selected ?? {id: 1, name: 'hommes'})
   }
 
   return (
@@ -40,8 +40,7 @@ const Home: React.FC = () => {
               <IonRadio slot="end" value={category.id} />
             </IonItem>))}
           </IonRadioGroup>
-          <IonItemDivider>Quiz sur les </IonItemDivider>
-          <IonItem>{category.name ?? '(none selected'}</IonItem>
+          <IonItemDivider>{'Quiz biblique de categorie' + ' ' + category.name}</IonItemDivider>
         </IonList>
         <div className="ion-text-center">
           <IonButton routerLink={`/page/quiz/category/${category.id}`} color="primary"><IonIcon icon={play} slot="start" /> Commencer</IonButton>

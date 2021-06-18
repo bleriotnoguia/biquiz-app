@@ -1,11 +1,25 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonList, IonLabel, IonInput, IonToggle, IonText } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonList, IonLabel, IonInput, IonToggle, IonText, IonAlert } from '@ionic/react';
 import {useState, useEffect} from 'react'
 import './Settings.css';
+
+// const audio = new Audio('/assets/ForestWalk-320bit.mp3')
 
 const Settings: React.FC = () => {
 
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isEasy, setIsEasy] = useState(localStorage.isEasy ? JSON.parse(localStorage.isEasy) : true)
+  const [showAlert, setShowAlert] = useState(false);
+  // const [playAudio, setPlayAudio] = useState(false);
+
+  // function handlePlayAudio(){
+  //   // localStorage.playAudio = !playAudio
+  //   setPlayAudio(!playAudio)
+  //   if(!playAudio){
+  //     audio.play()
+  //   }else{
+  //     audio.pause()
+  //   }
+  // }
   
   useEffect(() => {
     // Query for the toggle that is used to change between themes
@@ -19,6 +33,9 @@ const Settings: React.FC = () => {
     if(("isDarkMode" in localStorage) && JSON.parse(localStorage.isDarkMode)){
       setIsDarkMode(true)
     }
+    // if(("playAudio" in localStorage) && JSON.parse(localStorage.playAudio)){
+    //   setPlayAudio(true)
+    // }
   }, [])
 
   return (
@@ -34,24 +51,47 @@ const Settings: React.FC = () => {
 
       <IonContent fullscreen>
       <IonList>
+      <IonAlert
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header={'Choisir un niveau'}
+          message={'Le niveau difficile desactive l\'aide'}
+          buttons={[
+            {
+              text: 'Difficile',
+              cssClass: 'secondary',
+              handler: () => {
+                localStorage.isEasy = false
+                setIsEasy(false)
+              }
+            },
+            {
+              text: 'Facile',
+              handler: () => {
+                localStorage.isEasy = true
+                setIsEasy(true)
+              }
+            }
+          ]}
+        />
         <IonItem>
-          <IonLabel>
+          <IonLabel onClick={() => setShowAlert(true)}>
             <h3>Niveau</h3>
-            <p>Facile</p>
+            <p>{isEasy ? 'Facile' : 'Difficile'}</p>
           </IonLabel>
         </IonItem>
         <IonItem>
           <IonLabel>Thème sombre</IonLabel>
           <IonToggle slot="end" id="themeToggle" checked={isDarkMode} onIonChange={e => setIsDarkMode(e.detail.checked)}></IonToggle>
         </IonItem>
-        <IonItem>
+        {/* <IonItem>
           <IonLabel>Musique</IonLabel>
-          <IonToggle slot="end"></IonToggle>
-        </IonItem>
-        <IonItem>
+          <IonToggle slot="end" checked={playAudio} onIonChange={() => handlePlayAudio()}></IonToggle>
+        </IonItem> */}
+        {/* <IonItem>
           <IonLabel>Effet</IonLabel>
           <IonToggle slot="end"></IonToggle>
-        </IonItem>
+        </IonItem> */}
       </IonList>
       </IonContent>
     </IonPage>

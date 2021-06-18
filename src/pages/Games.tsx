@@ -1,6 +1,5 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonItem, IonItemDivider, IonLabel, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { useParams, useHistory } from 'react-router';
-import ExploreContainer from '../components/ExploreContainer';
+import { useHistory } from 'react-router';
 import gamesList from '../data/gamesList.json'
 import './Page.css';
 
@@ -34,7 +33,7 @@ const Games: React.FC = () => {
           <IonItem key={idx} onClick={() => history.push("/page/game/"+game.id)}>
             <IonLabel>
               <h3>{game.title}</h3>
-              <div>
+              <div className="text-dimgray">
                 {game.description.replace(/<[^>]*>?/gm, '').slice(0,35)+'...'}
               </div>
             </IonLabel>

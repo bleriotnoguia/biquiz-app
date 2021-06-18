@@ -54,7 +54,7 @@ const Quiz: React.FC = () => {
       localStorage.setItem("currentChoices", JSON.stringify(newArray))
       setTimeout(() => {
         nextQuiz()
-      }, 1500);
+      }, 1000);
     }
   }
 
@@ -100,7 +100,7 @@ const Quiz: React.FC = () => {
                 {currentQuizzes[currentQuizId] ? currentQuizzes[currentQuizId].content : ''}
               </h2>
             </IonText>
-            {(currentQuizzes[currentQuizId] && currentQuizzes[currentQuizId].hint) ? (
+            {(currentQuizzes[currentQuizId] && currentQuizzes[currentQuizId].hint && JSON.parse(localStorage.isEasy)) ? (
               <div className="ion-text-center">
               {help ? (
                 <div className="ion-align-items-center text-white ion-justify-content-center ion-padding-top" style={{display: "flex"}}>
