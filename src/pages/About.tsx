@@ -1,6 +1,6 @@
 import { IonAlert, IonBackButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import {useState} from 'react'
-import {SocialSharing} from '@ionic-native/social-sharing'
+import {SocialSharing} from '@awesome-cordova-plugins/social-sharing'
 import './Page.css';
 
 const About: React.FC = () => {

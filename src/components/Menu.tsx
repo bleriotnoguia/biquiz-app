@@ -13,7 +13,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import { alertCircleSharp, alertCircleOutline, settingsOutline, settingsSharp, sparklesOutline, sparklesSharp, shareOutline, shareSharp, powerOutline, powerSharp, shareSocialOutline, shareSocialSharp, homeOutline, homeSharp } from 'ionicons/icons';
 import './Menu.css';
-import {SocialSharing} from '@ionic-native/social-sharing'
+import {SocialSharing} from '@awesome-cordova-plugins/social-sharing'
 import { App } from '@capacitor/app';
 
 interface AppPage {

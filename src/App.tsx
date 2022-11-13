@@ -1,4 +1,4 @@
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact  } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
@@ -35,6 +35,7 @@ import Games from './pages/Games';
 import GameDetails from './pages/GameDetails';
 import {useEffect} from 'react'
 
+setupIonicReact();
 
 const App: React.FC = () => {
 
