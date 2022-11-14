@@ -2,6 +2,8 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import { bookSharp, play } from 'ionicons/icons';
 import {useState} from 'react'
 import categories from '../data/categories.json'
+import { useDispatch, useSelector } from 'react-redux';
+import { decrement, increment, selectCounter } from '../Reducer';
 
 interface CategoryConfig{
   id: number;
@@ -10,6 +12,9 @@ interface CategoryConfig{
 
 const Home: React.FC = () => {
   const [category, setCategory] = useState<CategoryConfig>(categories[0]);
+
+  const counter = useSelector(selectCounter);
+  const dispatch = useDispatch();
 
   const handleCategorySelected = (category_id: number) => {
     var category_selected = categories.find((item) => item.id === category_id)
@@ -44,6 +49,11 @@ const Home: React.FC = () => {
         <div className="ion-text-center">
           <IonButton routerLink={`/page/quiz/category/${category.id}`} color="primary"><IonIcon icon={play} slot="start" /> Commencer</IonButton>
         </div>
+        <IonItem>
+          Count : {counter?.count || 0}
+          <IonButton slot="end" onClick={() => dispatch(increment())} > Increment</IonButton>
+          <IonButton slot="end" color="danger" onClick={() => dispatch(decrement())} > Decrement</IonButton>
+        </IonItem>
       </IonContent>
     </IonPage>
   );
