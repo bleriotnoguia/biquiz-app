@@ -1,8 +1,7 @@
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact  } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Menu from './components/Menu';
-import Page from './pages/Page';
 import Settings from './pages/Settings';
 import About from './pages/About';
 import Quiz from './pages/Quiz';
@@ -80,9 +79,6 @@ useEffect(() => {
             <Route path="/page/game/:id">
               <GameDetails />
             </Route>
-            {/* <Route path="/page/:name" exact={true}>
-              <Page />
-            </Route> */}
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>

@@ -1,7 +1,7 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useParams } from 'react-router';
 import gamesList from '../data/gamesList.json'
-import './Page.css';
+import '../App.css';
 
 const GameDetails: React.FC = () => {
 

@@ -2,7 +2,6 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import { bookSharp, play } from 'ionicons/icons';
 import {useState} from 'react'
 import categories from '../data/categories.json'
-import './Page.css';
 
 interface CategoryConfig{
   id: number;
@@ -13,7 +12,7 @@ const Home: React.FC = () => {
   const [category, setCategory] = useState<CategoryConfig>(categories[0]);
 
   const handleCategorySelected = (category_id: number) => {
-    var category_selected = categories.find((item) => item.id == category_id)
+    var category_selected = categories.find((item) => item.id === category_id)
     setCategory(category_selected ?? {id: 1, name: 'hommes'})
   }
 

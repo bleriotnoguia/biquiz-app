@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { checkboxSharp, checkmarkSharp, closeSharp, stopOutline } from 'ionicons/icons';
 import {answerConfig} from './QuizInterface'
-import './Page.css';
+import '../App.css';
 
 const Answers: React.FC = () => {
   const [currentQuizzes, setCurrentQuizzes] = useState<any[]>([])

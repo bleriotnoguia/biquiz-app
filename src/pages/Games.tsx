@@ -1,7 +1,7 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonItem, IonItemDivider, IonLabel, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useHistory } from 'react-router';
 import gamesList from '../data/gamesList.json'
-import './Page.css';
+import '../App.css';
 
 interface gameConfig{
   id: number;
