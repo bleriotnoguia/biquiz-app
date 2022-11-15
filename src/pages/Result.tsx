@@ -1,15 +1,18 @@
-import {useEffect, useState} from 'react'
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { eyeSharp, refreshSharp, starHalfSharp, starOutline, starSharp } from 'ionicons/icons';
-import {quizConfig, answerConfig} from './QuizInterface'
 import "./Result.css";
+import { useAppSelector } from '../hooks';
+import { Choice, deleteChoices } from '../slices/currentQuizSlice';
+import { useHistory } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 const Result: React.FC = () => {
-  const [currentChoices, setCurrentChoices] = useState<object[]>([])
-  const [currentQuizzes, setCurrentQuizzes] = useState<quizConfig[]>([])
+  const choices = useAppSelector(state => state.currentQuiz.choices)
+  const questions = useAppSelector(state => state.currentQuiz.questions)
+  const dispatch = useDispatch()
+  let history = useHistory()
 
   function getStars(rating: number) {
-
     // Round to nearest half
     rating = Math.round(rating * 2) / 2;
     let output = [];
@@ -27,13 +30,18 @@ const Result: React.FC = () => {
       output.push(<IonIcon icon={starOutline} key={++count} />);
   
     return output;
-  
   }
 
-  useEffect(() => {
-    setCurrentChoices(JSON.parse(localStorage.getItem('currentChoices')??'[]'))
-    setCurrentQuizzes(JSON.parse(localStorage.getItem('currentQuizzes')??'[]'))
-  }, [])
+  const checkIsCorrect = (item: Choice) => {
+    let question = questions.find(q => q.id === item.question_id)
+    let choice = question?.options.find(c => c.id === item.choice_id)
+    return choice?.is_correct
+  }
+
+  const replay = () => {
+    dispatch(deleteChoices())
+    history.push(`/page/quiz/category/${questions.length ? questions[0].category_id : ''}`)
+  }
 
   return (
     <IonPage>
@@ -52,19 +60,19 @@ const Result: React.FC = () => {
         </IonText>
         <div className="score-container">
           <div className="score text-white">
-            <h1>{currentChoices.filter((item: any) => item.choice.is_correct).length}/{currentChoices.length}</h1>
+            <h1>{choices.filter((item: Choice) => checkIsCorrect(item)).length}/{choices.length}</h1>
           </div>
         </div>
         <div className="star">
-          {getStars((currentChoices.filter((item: any) => item.choice.is_correct).length * 5) / currentChoices.length)}
+          {getStars((choices.filter((item: Choice) => checkIsCorrect(item)).length * 5) / choices.length)}
         </div>
         <div>
           <h2>Quiz terminé avec succès</h2>
-          <p>Vous avez fait {currentChoices.length} questions et à partir de cela {currentChoices.filter((item: any) => item.choice.is_correct).length} réponse(s) sont correctes dans le quiz</p>
+          <p>Vous avez fait {choices.length} questions et à partir de cela {choices.filter((item: Choice) => checkIsCorrect(item)).length} réponse(s) sont correctes dans le quiz</p>
         </div>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonButton routerLink={`/page/quiz/category/${currentQuizzes.length ? currentQuizzes[0].category_id : ''}`} color="primary"><IonIcon icon={refreshSharp} slot="start" /> Rejouer</IonButton>
+            <IonButton onClick={() => replay()} color="primary"><IonIcon icon={refreshSharp} slot="start" /> Rejouer</IonButton>
           </IonRow>
           <IonRow className="ion-justify-content-center">
             <IonButton routerLink='/page/answers' color="primary"><IonIcon icon={eyeSharp} slot="start" /> Voir la corrections</IonButton>

@@ -1,20 +1,31 @@
 import {useState, useEffect} from 'react'
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { checkboxSharp, checkmarkSharp, closeSharp, stopOutline } from 'ionicons/icons';
-import {answerConfig} from './QuizInterface'
+import { Choice, Question, QuestionOption } from '../slices/currentQuizSlice';
+import { useAppSelector } from '../hooks';
 import '../App.css';
 
 const Answers: React.FC = () => {
-  const [currentQuizzes, setCurrentQuizzes] = useState<any[]>([])
+  const questions = useAppSelector(state => state.currentQuiz.questions)
+  const choices = useAppSelector(state => state.currentQuiz.choices)
 
-  useEffect(() => {
-    let current = JSON.parse(localStorage.getItem('currentQuizzes')??'[]')
-    let newCurrent = current.map((quiz: any) => {
-      quiz.choice = JSON.parse(localStorage.getItem('currentChoices')??'[]').find((elt:any) => elt.quiz_id === quiz.id).choice
-      return quiz
-    })
-    setCurrentQuizzes(newCurrent)
-  }, [])
+  const checkIsCorrect = (item: Choice) => {
+    let question = questions.find(q => q.id === item.question_id)
+    let choice = question?.options.find(c => c.id === item.choice_id)
+    return choice?.is_correct
+  }
+
+  const checkQuestionValidated = (question_id: number) => {
+    let question = questions.find(q => q.id === question_id)
+    let choice = choices.find(c => c.question_id === question_id)
+    let questionOption = question?.options.find(c => c.id === choice?.choice_id)
+    return questionOption?.is_correct
+  }
+
+  const getChoiceByQuestion = (question_id: number) => {
+    let choice = choices.find(c => c.question_id === question_id)
+    return choice
+  }
 
   return (
     <IonPage>
@@ -34,26 +45,26 @@ const Answers: React.FC = () => {
           </IonText>
         </div>
           <IonItemDivider>
-            <p className="m-0">Score : {currentQuizzes.filter((item: any) => item.choice.is_correct).length}/{currentQuizzes.length}</p>
+            <p className="m-0">Score : {choices.filter((item: Choice) => checkIsCorrect(item)).length}/{choices.length}</p>
           </IonItemDivider>
         <IonList>
-          {currentQuizzes.map((item, idx) => (
+          {questions.map((item, idx) => (
             <div key={idx}>
               <IonItem>
-              <IonIcon icon={item.choice.is_correct ? checkmarkSharp : closeSharp} slot="end" color={item.choice.is_correct ? "success" : "danger"} />
+              <IonIcon icon={checkQuestionValidated(item.id) ? checkmarkSharp : closeSharp} slot="end" color={checkQuestionValidated(item.id) ? "success" : "danger"} />
               <div>
                 <h4>Quiz {idx+1}</h4>
-                <p className="text-dimgray">{item.content}</p>
+                <p className="text-dimgray">{item.name}</p>
               </div>
             </IonItem>
-            {item.answers.map((answer: answerConfig, index:number) => (<IonItem key={index}>
-              <IonIcon slot="start" icon={(answer.is_correct || (item.choice.id === answer.id) ) ? checkboxSharp : stopOutline} color={answer.is_correct ? "success" : (item.choice.id === answer.id) ? "danger" : ""} />
-              <IonLabel color={answer.is_correct ? "success" : (item.choice.id === answer.id) ? "danger" : ""}>
-                {answer.content}  
+            {item.options.map((option: QuestionOption, index:number) => (<IonItem key={index}>
+              <IonIcon slot="start" icon={(option.is_correct || (getChoiceByQuestion(item.id)?.choice_id === option.id) ) ? checkboxSharp : stopOutline} color={option.is_correct ? "success" : (getChoiceByQuestion(item.id)?.choice_id === option.id) ? "danger" : ""} />
+              <IonLabel color={option.is_correct ? "success" : (getChoiceByQuestion(item.id)?.choice_id === option.id) ? "danger" : ""}>
+                {option.name}  
               </IonLabel>
             </IonItem>))}
             <IonItemDivider>
-              Source: {item.hint} 
+              Source: <a href="jw.org">Ma référence</a> 
             </IonItemDivider>
             </div>
           ))}

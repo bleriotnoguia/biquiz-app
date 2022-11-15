@@ -2,24 +2,25 @@ import { IonBackButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPag
 import {useState, useEffect} from 'react'
 import './Settings.css';
 
-// const audio = new Audio('/assets/ForestWalk-320bit.mp3')
+const audio = new Audio('/assets/demo_audio.mp3')
 
 const Settings: React.FC = () => {
 
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isEasy, setIsEasy] = useState(localStorage.isEasy ? JSON.parse(localStorage.isEasy) : true)
   const [showAlert, setShowAlert] = useState(false);
-  // const [playAudio, setPlayAudio] = useState(false);
+  const [playAudio, setPlayAudio] = useState(false);
 
-  // function handlePlayAudio(){
-  //   // localStorage.playAudio = !playAudio
-  //   setPlayAudio(!playAudio)
-  //   if(!playAudio){
-  //     audio.play()
-  //   }else{
-  //     audio.pause()
-  //   }
-  // }
+  function handlePlayAudio(){
+    localStorage.playAudio = !playAudio
+    setPlayAudio(!playAudio)
+    if(!playAudio){
+      audio.play()
+      audio.loop = true;
+    }else{
+      audio.pause()
+    }
+  }
   
   useEffect(() => {
     // Query for the toggle that is used to change between themes
@@ -30,12 +31,14 @@ const Settings: React.FC = () => {
       document.body.classList.toggle('dark', ev.detail.checked);
       localStorage.isDarkMode = ev.detail.checked
     });
+
     if(("isDarkMode" in localStorage) && JSON.parse(localStorage.isDarkMode)){
       setIsDarkMode(true)
     }
-    // if(("playAudio" in localStorage) && JSON.parse(localStorage.playAudio)){
-    //   setPlayAudio(true)
-    // }
+
+    if(("playAudio" in localStorage) && JSON.parse(localStorage.playAudio)){
+      setPlayAudio(true)
+    }
   }, [])
 
   return (

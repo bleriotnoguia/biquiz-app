@@ -4,8 +4,8 @@ import { Route } from 'react-router-dom';
 import Menu from './components/Menu';
 import Settings from './pages/Settings';
 import About from './pages/About';
-import Quiz from './pages/Quiz';
-import Home from './pages/Home';
+import Quiz from './pages/quiz/Quiz';
+import Home from './pages/home/Home';
 import Result from './pages/Result';
 import Answers from './pages/Answers';
 

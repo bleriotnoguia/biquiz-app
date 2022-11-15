@@ -46,12 +46,12 @@ const appPages: AppPage[] = [
     iosIcon: settingsOutline,
     mdIcon: settingsSharp
   },
-  {
-    title: 'Autres jeux',
-    url: '/page/Games',
-    iosIcon: sparklesOutline,
-    mdIcon: sparklesSharp
-  }
+  // {
+  //   title: 'Autres jeux',
+  //   url: '/page/Games',
+  //   iosIcon: sparklesOutline,
+  //   mdIcon: sparklesSharp
+  // }
 ];
 
 const Menu: React.FC = () => {
@@ -80,12 +80,12 @@ const Menu: React.FC = () => {
               <IonLabel>Partager</IonLabel>
             </IonItem>
           </IonMenuToggle>
-          <IonMenuToggle autoHide={false}>
+          {/* <IonMenuToggle autoHide={false}>
             <IonItem className={location.pathname === '/page/Quit' ? 'selected' : ''} onClick={() => App.exitApp()} routerDirection="none" lines="none" detail={false}>
               <IonIcon slot="start" ios={powerOutline} md={powerSharp} />
               <IonLabel>Quitter</IonLabel>
             </IonItem>
-          </IonMenuToggle>
+          </IonMenuToggle> */}
         </IonList>
       </IonContent>
     </IonMenu>
