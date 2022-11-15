@@ -41,7 +41,6 @@ const App: React.FC = () => {
 const ionRouter = useIonRouter();
 
 useEffect(() => {
-  localStorage.isEasy = localStorage.isEasy ? JSON.parse(localStorage.isEasy) : true
   // MyApp.addListener('backButton', () => {
   //   if (!ionRouter.canGoBack()) {
   //     MyApp.exitApp();
