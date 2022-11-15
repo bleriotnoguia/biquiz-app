@@ -53,7 +53,7 @@ const Answers: React.FC = () => {
               <IonItem>
               <IonIcon icon={checkQuestionValidated(item.id) ? checkmarkSharp : closeSharp} slot="end" color={checkQuestionValidated(item.id) ? "success" : "danger"} />
               <div>
-                <h4>Quiz {idx+1}</h4>
+                <h4>Question {idx+1}</h4>
                 <p className="text-dimgray">{item.name}</p>
               </div>
             </IonItem>
@@ -64,7 +64,7 @@ const Answers: React.FC = () => {
               </IonLabel>
             </IonItem>))}
             <IonItemDivider>
-              Source: <a href="jw.org">Ma référence</a> 
+              Source: <a href="https://www.jw.org" style={{textDecoration: 'none', marginLeft: '5px'}}>Voir la référence</a> 
             </IonItemDivider>
             </div>
           ))}

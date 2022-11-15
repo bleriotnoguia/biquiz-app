@@ -27,6 +27,3 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
-todo.txt
-
-/public/assets/demo_audio.mp3

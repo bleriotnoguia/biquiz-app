@@ -2,25 +2,11 @@ import { IonBackButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPag
 import {useState, useEffect} from 'react'
 import './Settings.css';
 
-const audio = new Audio('/assets/demo_audio.mp3')
-
 const Settings: React.FC = () => {
 
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isEasy, setIsEasy] = useState(localStorage.isEasy ? JSON.parse(localStorage.isEasy) : true)
   const [showAlert, setShowAlert] = useState(false);
-  const [playAudio, setPlayAudio] = useState(false);
-
-  function handlePlayAudio(){
-    localStorage.playAudio = !playAudio
-    setPlayAudio(!playAudio)
-    if(!playAudio){
-      audio.play()
-      audio.loop = true;
-    }else{
-      audio.pause()
-    }
-  }
   
   useEffect(() => {
     // Query for the toggle that is used to change between themes
@@ -34,10 +20,6 @@ const Settings: React.FC = () => {
 
     if(("isDarkMode" in localStorage) && JSON.parse(localStorage.isDarkMode)){
       setIsDarkMode(true)
-    }
-
-    if(("playAudio" in localStorage) && JSON.parse(localStorage.playAudio)){
-      setPlayAudio(true)
     }
   }, [])
 
@@ -77,20 +59,16 @@ const Settings: React.FC = () => {
             }
           ]}
         />
-        <IonItem>
+        {/* <IonItem>
           <IonLabel onClick={() => setShowAlert(true)}>
             <h3>Niveau</h3>
             <p>{isEasy ? 'Facile' : 'Difficile'}</p>
           </IonLabel>
-        </IonItem>
+        </IonItem> */}
         <IonItem>
           <IonLabel>Thème sombre</IonLabel>
           <IonToggle slot="end" id="themeToggle" checked={isDarkMode} onIonChange={e => setIsDarkMode(e.detail.checked)}></IonToggle>
         </IonItem>
-        {/* <IonItem>
-          <IonLabel>Musique</IonLabel>
-          <IonToggle slot="end" checked={playAudio} onIonChange={() => handlePlayAudio()}></IonToggle>
-        </IonItem> */}
         {/* <IonItem>
           <IonLabel>Effet</IonLabel>
           <IonToggle slot="end"></IonToggle>
