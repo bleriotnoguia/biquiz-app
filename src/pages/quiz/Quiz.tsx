@@ -134,6 +134,9 @@ const Quiz: React.FC = () => {
                       color="success"
                       icon={checkmarkCircle}
                     />
+                  )}{" "}
+                  {choiceId && choiceId == option.id && option.is_correct === false && (
+                    <IonIcon slot="end" color="danger" icon={closeCircle} />
                   )}
                 </IonItem>
               ))}
