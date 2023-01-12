@@ -17,9 +17,8 @@ import {
 } from "@ionic/react";
 import { checkmarkCircle, closeCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { addChoice, fetchQuestions } from "../../slices/currentQuizSlice";
 import FeedBack from "./FeedBack";
 import "./Quiz.css";
@@ -29,7 +28,7 @@ const Quiz: React.FC = () => {
   const [questionId, setQuestionId] = useState(0);
   const [choiceId, setChoiceId] = useState<undefined | number>(undefined);
   const [feedBackIsOpen, setFeedBackIsOpen] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleOpenModal = () => {
     setFeedBackIsOpen(true);

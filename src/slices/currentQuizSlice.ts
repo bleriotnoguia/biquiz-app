@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import quizzes from '../data/quizzes.json'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 export interface QuestionOption {
     id: number;
@@ -22,21 +22,27 @@ export interface Choice {
 interface  CurrentQuizState {
   questions: Question[];
   choices: Choice[];
+  loading: boolean;
+  error: Error | null;
 }
 
 const defaultCurrentQuizState:CurrentQuizState = {
+    error: null,
+    loading: false,
     questions: [],
     choices: []
 }
+
+export const fetchQuestions = createAsyncThunk("questions/fetch", async (arg: {category_id: string}) => {
+    const res = await axios.get(`http://localhost:8000/api/question-category/${arg.category_id}`)
+    return res.data
+    }
+  );
 
 const currentQuizSlice = createSlice({
 	initialState: defaultCurrentQuizState,
 	name: 'currentQuiz',
 	reducers: {
-		fetchQuestions: (state, data) => {
-            // TODO : Get the questions belongsTo data.payload.category_id
-			state.questions = quizzes
-        },
         addChoice: (state, data) => {
             var newChoices = [data.payload, ...state.choices]
 			state.choices = newChoices
@@ -44,12 +50,24 @@ const currentQuizSlice = createSlice({
         deleteChoices: (state) => {
             state.choices = []
         }
-    }
+    },
+    extraReducers: {
+      [fetchQuestions.pending.type]: (state) => {
+        state.loading = true;
+      },
+      [fetchQuestions.fulfilled.type]: (state, action) => {
+        state.questions = action.payload.data.questions;
+        state.loading = false;
+      },
+      [fetchQuestions.rejected.type]: (state, action) => {
+        console.error(action);
+        state.loading = false;
+      },
+    },
 });
 
 //actions
 export const {
-    fetchQuestions,
     deleteChoices,
     addChoice
 } = currentQuizSlice.actions;
