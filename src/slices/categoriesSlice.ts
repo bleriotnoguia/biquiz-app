@@ -1,32 +1,52 @@
-import { createSlice } from '@reduxjs/toolkit';
-import categories from '../data/categories.json'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 interface CategoryConfig{
     id: number;
     name: string;
+    description: string;
+    is_active: number;
+    parent_id: number | null;
+    slug: string;
+
   }
 
 interface  CategoriesState {
+  loading: boolean;
+  error: Error | null;
   data: (CategoryConfig | null)[]
 }
 
 const defaultCategoriesState: CategoriesState = {
-    data: []
+  error: null,
+  loading: false,
+  data: [],
 }
+
+export const fetchCategories = createAsyncThunk("categories/fetch", async () => {
+  const res = await axios.get(`http://localhost:8000/api/question-categories`)
+  return res.data
+  }
+);
 
 const categoriesSlice = createSlice({
 	initialState: defaultCategoriesState,
 	name: 'categories',
-	reducers: {
-		fetchCategories: state => {
-			state.data = categories
-        }
-    }
+	reducers: {},
+  extraReducers: {
+    [fetchCategories.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [fetchCategories.fulfilled.type]: (state, action) => {
+      state.data = action.payload.data;
+      state.loading = false;
+    },
+    [fetchCategories.rejected.type]: (state, action) => {
+      console.error(action);
+      state.loading = false;
+    },
+  },
 });
 
-//actions
-export const {
-    fetchCategories,
-} = categoriesSlice.actions;
 
 export const categoriesReducer = categoriesSlice.reducer

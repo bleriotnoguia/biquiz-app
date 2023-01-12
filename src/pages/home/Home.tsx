@@ -1,16 +1,15 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonIcon } from '@ionic/react';
 import { bookSharp } from 'ionicons/icons';
-import { useDispatch } from 'react-redux';
 import styles from './Home.module.css';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect } from 'react';
 import { fetchCategories } from '../../slices/categoriesSlice';
 import { deleteChoices } from '../../slices/currentQuizSlice';
 
 const Home: React.FC = () => {
   const categories = useAppSelector(state => state.categories)
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchCategories())
@@ -35,7 +34,7 @@ const Home: React.FC = () => {
             <Link to={`/page/quiz/category/${category?.id}`} onClick={() => dispatch(deleteChoices())} className={styles.linkStyle} >
               <div>
                 <h1 style={{fontWeight: 'bold', fontSize: '1.5em'}}>{category?.name}</h1>
-                <p>Testez votre connaissance des personnages de la bible</p>
+                <p>{category?.description}</p>
               </div>
             </Link>
           </div>

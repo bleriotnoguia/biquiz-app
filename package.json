@@ -22,6 +22,7 @@
     "@types/react-redux": "^7.1.24",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "axios": "^1.2.0",
     "cordova-plugin-x-socialsharing": "^6.0.3",
     "es6-promise-plugin": "^4.2.2",
     "ionicons": "^5.4.0",
