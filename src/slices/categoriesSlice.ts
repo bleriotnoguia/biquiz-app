@@ -14,7 +14,7 @@ interface CategoryConfig{
 interface  CategoriesState {
   loading: boolean;
   error: Error | null;
-  data: (CategoryConfig | null)[]
+  data: CategoryConfig[]
 }
 
 const defaultCategoriesState: CategoriesState = {

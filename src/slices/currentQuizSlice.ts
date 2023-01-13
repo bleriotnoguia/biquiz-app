@@ -11,7 +11,7 @@ export interface Question {
     id: number;
     name: string;
     options: QuestionOption[]
-    category_id: number;
+    question_category_id: number;
 }
 
 export interface Choice {
@@ -45,7 +45,7 @@ const currentQuizSlice = createSlice({
 	reducers: {
         addChoice: (state, data) => {
             var newChoices = [data.payload, ...state.choices]
-			state.choices = newChoices
+			      state.choices = newChoices
         },
         deleteChoices: (state) => {
             state.choices = []

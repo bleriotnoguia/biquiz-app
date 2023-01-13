@@ -66,7 +66,7 @@ useEffect(() => {
             <Route path="/page/quiz/category/:category_id">
               <Quiz />
             </Route>
-            <Route path="/page/result">
+            <Route path="/page/result/:category_id">
               <Result />
             </Route>
             <Route path="/page/answers">

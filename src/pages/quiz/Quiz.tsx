@@ -19,12 +19,16 @@ import { checkmarkCircle, closeCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { addChoice, fetchQuestions } from "../../slices/currentQuizSlice";
+import { addChoice, Choice, fetchQuestions } from "../../slices/currentQuizSlice";
+import { setScore } from "../../slices/scoreSlice";
+import { checkIsCorrect } from "../../utils";
 import FeedBack from "./FeedBack";
 import "./Quiz.css";
 
 const Quiz: React.FC = () => {
   const questions = useAppSelector((state) => state.currentQuiz.questions);
+  const choices = useAppSelector(state => state.currentQuiz.choices)
+  const scores = useAppSelector(state => state.scores.data)
   const [questionId, setQuestionId] = useState(0);
   const [choiceId, setChoiceId] = useState<undefined | number>(undefined);
   const [feedBackIsOpen, setFeedBackIsOpen] = useState(false);
@@ -58,7 +62,13 @@ const Quiz: React.FC = () => {
     if (nextQuizId < questions.length) {
       setQuestionId(nextQuizId);
     } else {
-      history.push("/page/result");
+      let stars_won = (choices.filter((item: Choice) => checkIsCorrect(item, questions)).length*5)/choices.length
+      let category_score = scores.find(score => score.category_id === category_id)
+      if(!category_score || (category_score && category_score.stars < stars_won)){
+        dispatch(setScore({category_id, stars: stars_won}))
+      }
+
+      history.push("/page/result/"+category_id);
       setQuestionId(0);
     }
     handleCloseModal();
