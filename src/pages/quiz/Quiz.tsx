@@ -134,13 +134,26 @@ const Quiz: React.FC = () => {
                       icon={checkmarkCircle}
                     />
                   )}{" "}
-                  {choiceId && choiceId == option.id && option.is_correct === false && (
-                    <IonIcon slot="end" color="danger" icon={closeCircle} />
-                  )}
+                  {choiceId &&
+                    choiceId == option.id &&
+                    option.is_correct === false && (
+                      <IonIcon slot="end" color="danger" icon={closeCircle} />
+                    )}
                 </IonItem>
               ))}
           </IonRadioGroup>
         </IonList>
+        <IonText style={{ textAlign: "center" }}>
+          <h5
+            style={{
+              fontWeight: "bold",
+              backgroundColor: "lightgray",
+              padding: "0.5em 0",
+            }}
+          >
+            Question {questionId+1}/{questions.length}
+          </h5>
+        </IonText>
       </IonContent>
       <FeedBack
         handleCloseModal={handleCloseModal}
