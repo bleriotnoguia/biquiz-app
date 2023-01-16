@@ -64,7 +64,7 @@ const Answers: React.FC = () => {
               </IonLabel>
             </IonItem>))}
             <IonItemDivider>
-              Source: <a href="https://www.jw.org" style={{textDecoration: 'none', marginLeft: '5px'}}>Voir la référence</a> 
+              Source : {item.source_text}
             </IonItemDivider>
             </div>
           ))}

@@ -10,7 +10,8 @@ export interface QuestionOption {
 export interface Question {
     id: number;
     name: string;
-    options: QuestionOption[]
+    source_text: string;
+    options: QuestionOption[];
     question_category_id: number;
 }
 
