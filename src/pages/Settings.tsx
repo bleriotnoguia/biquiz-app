@@ -15,11 +15,12 @@ import {
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../hooks";
-import { setIsDarkMode, setIsEasy } from "../slices/settingSlice";
+import { setIsDarkMode, setIsEasy, setDisplaySource } from "../slices/settingSlice";
 import "./Settings.css";
 
 const Settings: React.FC = () => {
   const isDarkMode = useAppSelector((state) => state.setting.isDarkMode);
+  const displaySource = useAppSelector((state) => state.setting.displaySource);
   const [showAlert, setShowAlert] = useState(false);
   const dispatch = useDispatch();
 
@@ -70,6 +71,15 @@ const Settings: React.FC = () => {
               id="themeToggle"
               checked={isDarkMode}
               onIonChange={(e) => dispatch(setIsDarkMode(e.detail.checked))}
+            ></IonToggle>
+          </IonItem>
+          <IonItem>
+            <IonLabel>Montrer la source dans le quiz</IonLabel>
+            <IonToggle
+              slot="end"
+              id="themeToggle"
+              checked={displaySource}
+              onIonChange={(e) => dispatch(setDisplaySource(e.detail.checked))}
             ></IonToggle>
           </IonItem>
           {/* <IonItem>

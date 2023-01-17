@@ -3,11 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface SettingState {
   isEasy: boolean;
   isDarkMode: boolean;
+  displaySource: boolean;
 }
 
 const defaultSettingState: SettingState = {
     isEasy: localStorage.isEasy ? JSON.parse(localStorage.isEasy) : true,
-    isDarkMode: localStorage.isDarkMode ? JSON.parse(localStorage.isDarkMode) : false
+    isDarkMode: localStorage.isDarkMode ? JSON.parse(localStorage.isDarkMode) : false,
+    displaySource: localStorage.displaySource ? JSON.parse(localStorage.displaySource) : false
 }
 
 const settingSlice = createSlice({
@@ -26,6 +28,10 @@ const settingSlice = createSlice({
       state.isDarkMode = data.payload
       localStorage.isDarkMode = data.payload
       document.body.classList.toggle("dark", data.payload);
+    },
+    setDisplaySource: (state, data) => {
+      state.displaySource = data.payload
+      localStorage.displaySource = data.payload
     }
   }
 });
@@ -33,7 +39,8 @@ const settingSlice = createSlice({
 //actions
 export const {
     setIsEasy,
-    setIsDarkMode
+    setIsDarkMode,
+    setDisplaySource
 } = settingSlice.actions;
 
 export const settingReducer = settingSlice.reducer

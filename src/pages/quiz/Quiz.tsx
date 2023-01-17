@@ -1,5 +1,6 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -19,19 +20,25 @@ import { checkmarkCircle, closeCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { addChoice, Choice, fetchQuestions } from "../../slices/currentQuizSlice";
+import {
+  addChoice,
+  Choice,
+  fetchQuestions,
+} from "../../slices/currentQuizSlice";
 import { setScore } from "../../slices/scoreSlice";
 import { checkIsCorrect } from "../../utils";
 import FeedBack from "./FeedBack";
 import "./Quiz.css";
 
 const Quiz: React.FC = () => {
+  const displaySource = useAppSelector((state) => state.setting.displaySource);
   const questions = useAppSelector((state) => state.currentQuiz.questions);
-  const choices = useAppSelector(state => state.currentQuiz.choices)
-  const scores = useAppSelector(state => state.scores.data)
+  const choices = useAppSelector((state) => state.currentQuiz.choices);
+  const scores = useAppSelector((state) => state.scores.data);
   const [questionId, setQuestionId] = useState(0);
   const [choiceId, setChoiceId] = useState<undefined | number>(undefined);
   const [feedBackIsOpen, setFeedBackIsOpen] = useState(false);
+  const [showSource, setShowSource] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleOpenModal = () => {
@@ -62,13 +69,22 @@ const Quiz: React.FC = () => {
     if (nextQuizId < questions.length) {
       setQuestionId(nextQuizId);
     } else {
-      let stars_won = (choices.filter((item: Choice) => checkIsCorrect(item, questions)).length*5)/choices.length
-      let category_score = scores.find(score => score.category_id === category_id)
-      if(!category_score || (category_score && category_score.stars < stars_won)){
-        dispatch(setScore({category_id, stars: stars_won}))
+      let stars_won =
+        (choices.filter((item: Choice) => checkIsCorrect(item, questions))
+          .length *
+          5) /
+        choices.length;
+      let category_score = scores.find(
+        (score) => score.category_id === category_id
+      );
+      if (
+        !category_score ||
+        (category_score && category_score.stars < stars_won)
+      ) {
+        dispatch(setScore({ category_id, stars: stars_won }));
       }
 
-      history.push("/page/result/"+category_id);
+      history.push("/page/result/" + category_id);
       setQuestionId(0);
     }
     handleCloseModal();
@@ -113,6 +129,15 @@ const Quiz: React.FC = () => {
           <h3 style={{ fontWeight: "bold" }}>
             {questions[questionId] ? questions[questionId].name : ""}
           </h3>
+          <div style={{ textAlign: "center" }}>
+            {displaySource && (
+              <IonButton onClick={() => setShowSource(!showSource)}>
+                {showSource
+                  ? questions[questionId].source_text
+                  : "Voir la source"}
+              </IonButton>
+            )}
+          </div>
         </IonText>
         <IonList>
           <IonRadioGroup value={choiceId}>
@@ -161,7 +186,7 @@ const Quiz: React.FC = () => {
               padding: "0.5em 0",
             }}
           >
-            Question {questionId+1}/{questions.length}
+            Question {questionId + 1}/{questions.length}
           </h5>
         </IonText>
       </IonContent>
