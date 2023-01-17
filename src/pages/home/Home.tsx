@@ -14,6 +14,7 @@ import {
   bookSharp,
   lockClosed,
   starSharp,
+  statsChart,
 } from "ionicons/icons";
 import styles from "./Home.module.css";
 import { useHistory } from "react-router-dom";
@@ -100,7 +101,7 @@ const Home: React.FC = () => {
                     <div style={{ fontSize: "1.5em" }}>
                       {getStars(category_score?.stars ?? 0)}
                     </div>
-                    <span>Niveau {category.level}</span>
+                    <span><b>{category.level} </b><IonIcon icon={statsChart} /></span>
                   </div>
                 </div>
               </div>
