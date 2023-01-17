@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-interface CategoryConfig{
+export interface CategoryConfig{
     id: number;
     name: string;
+    level: number;
     description: string;
     is_active: number;
     parent_id: number | null;
