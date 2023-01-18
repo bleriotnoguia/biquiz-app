@@ -14,8 +14,8 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { fetchCategories } from "../slices/categoriesSlice";
 import { setIsDarkMode, setLanguage, setDisplaySource } from "../slices/settingSlice";
 import "./Settings.css";
 
@@ -25,7 +25,7 @@ const Settings: React.FC = () => {
   const displaySource = useAppSelector((state) => state.setting.displaySource);
   const {t, i18n} = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <IonPage>
@@ -51,6 +51,7 @@ const Settings: React.FC = () => {
                 handler: () => {
                   i18n.changeLanguage('fr')
                   dispatch(setLanguage('fr'));
+                  dispatch(fetchCategories());
                 },
               },
               {
@@ -58,6 +59,7 @@ const Settings: React.FC = () => {
                 handler: () => {
                   i18n.changeLanguage('en')
                   dispatch(setLanguage('en'));
+                  dispatch(fetchCategories());
                 },
               },
             ]}

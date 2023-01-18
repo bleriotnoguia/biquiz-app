@@ -25,7 +25,8 @@ const defaultCategoriesState: CategoriesState = {
 }
 
 export const fetchCategories = createAsyncThunk("categories/fetch", async () => {
-  const res = await axios.get(`http://localhost:8000/api/question-categories`)
+  const lang = localStorage.language ? localStorage.language : 'fr'
+  const res = await axios.get(`http://localhost:8000/api/${lang}/question-categories`)
   return res.data
   }
 );
