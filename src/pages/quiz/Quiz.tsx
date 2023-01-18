@@ -24,6 +24,7 @@ import {
   addChoice,
   Choice,
   fetchQuestions,
+  QuestionOption,
 } from "../../slices/currentQuizSlice";
 import { setScore } from "../../slices/scoreSlice";
 import { checkIsCorrect } from "../../utils";
@@ -35,10 +36,11 @@ const Quiz: React.FC = () => {
   const questions = useAppSelector((state) => state.currentQuiz.questions);
   const choices = useAppSelector((state) => state.currentQuiz.choices);
   const scores = useAppSelector((state) => state.scores.data);
-  const [questionId, setQuestionId] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [choiceId, setChoiceId] = useState<undefined | number>(undefined);
   const [feedBackIsOpen, setFeedBackIsOpen] = useState(false);
   const [showSource, setShowSource] = useState(false);
+  const [feedback, setFeedBack] = useState<{goodAnswer: QuestionOption, success: boolean}>()
   const dispatch = useAppDispatch();
 
   const handleOpenModal = () => {
@@ -56,18 +58,28 @@ const Quiz: React.FC = () => {
   function handleSetChoiceId(choiceId: number) {
     // Save the user choice
     const newChoice = {
-      question_id: questions[questionId].id,
+      question_id: questions[questionIndex].id,
       choice_id: choiceId,
     };
     setChoiceId(choiceId);
     dispatch(addChoice(newChoice));
+
+    let currentQuestion = questions.find(question => questions[questionIndex].id === question.id)
+    let isGoodAnswer = currentQuestion?.options.find(opt => opt.id === choiceId)?.is_correct!
+    let goodAnswer = currentQuestion?.options.find(opt => opt.is_correct === true)!
+
+    setFeedBack({
+      goodAnswer, 
+      success: isGoodAnswer
+    });
+
     handleOpenModal();
   }
 
   function nextQuiz() {
-    var nextQuizId = questionId + 1;
-    if (nextQuizId < questions.length) {
-      setQuestionId(nextQuizId);
+    var nextQuizIndex = questionIndex + 1;
+    if (nextQuizIndex < questions.length) {
+      setQuestionIndex(nextQuizIndex);
     } else {
       let stars_won =
         (choices.filter((item: Choice) => checkIsCorrect(item, questions))
@@ -85,7 +97,7 @@ const Quiz: React.FC = () => {
       }
 
       history.push("/page/result/" + category_id);
-      setQuestionId(0);
+      setQuestionIndex(0);
     }
     handleCloseModal();
     setChoiceId(undefined);
@@ -116,7 +128,7 @@ const Quiz: React.FC = () => {
         >
           <IonProgressBar
             style={{ height: "0.5em" }}
-            value={questionId / questions.length}
+            value={questionIndex / questions.length}
           ></IonProgressBar>
         </div>
         <IonText
@@ -127,13 +139,13 @@ const Quiz: React.FC = () => {
           }}
         >
           <h3 style={{ fontWeight: "bold" }}>
-            {questions[questionId] ? questions[questionId].name : ""}
+            {questions[questionIndex] ? questions[questionIndex].name : ""}
           </h3>
           <div style={{ textAlign: "center" }}>
             {displaySource && (
               <IonButton onClick={() => setShowSource(!showSource)}>
                 {showSource
-                  ? questions[questionId].source_text
+                  ? questions[questionIndex].source_text
                   : "Voir la source"}
               </IonButton>
             )}
@@ -141,8 +153,8 @@ const Quiz: React.FC = () => {
         </IonText>
         <IonList>
           <IonRadioGroup value={choiceId}>
-            {questions[questionId] &&
-              questions[questionId].options.map((option, id) => (
+            {questions[questionIndex] &&
+              questions[questionIndex].options.map((option, id) => (
                 <IonItem key={id}>
                   <IonRadio
                     slot="start"
@@ -154,7 +166,7 @@ const Quiz: React.FC = () => {
                       choiceId && option.is_correct === true
                         ? "success"
                         : choiceId &&
-                          choiceId == option.id &&
+                          choiceId === option.id &&
                           option.is_correct === false
                         ? "danger"
                         : ""
@@ -170,7 +182,7 @@ const Quiz: React.FC = () => {
                     />
                   )}{" "}
                   {choiceId &&
-                    choiceId == option.id &&
+                    choiceId === option.id &&
                     option.is_correct === false && (
                       <IonIcon slot="end" color="danger" icon={closeCircle} />
                     )}
@@ -186,11 +198,12 @@ const Quiz: React.FC = () => {
               padding: "0.5em 0",
             }}
           >
-            Question {questionId + 1}/{questions.length}
+            Question {questionIndex + 1}/{questions.length}
           </h5>
         </IonText>
       </IonContent>
       <FeedBack
+        feedback={feedback}
         handleCloseModal={handleCloseModal}
         isOpen={feedBackIsOpen}
         nextQuiz={nextQuiz}

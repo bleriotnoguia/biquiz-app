@@ -4,14 +4,16 @@ import {
   IonIcon,
   IonButton,
 } from '@ionic/react';
-import { flag, checkmarkCircle } from "ionicons/icons";
+import { checkmarkCircle, closeCircleSharp } from "ionicons/icons";
 
 import './FeedBack.css';
+import { QuestionOption } from '../../slices/currentQuizSlice';
 
 interface Props {
   handleCloseModal: () => void; 
   nextQuiz: () => void; 
   isOpen: boolean;
+  feedback: {goodAnswer: QuestionOption, success: boolean} | undefined;
 }
 
 const FeedBack : React.FC<Props> = (props) =>  {
@@ -20,15 +22,20 @@ const FeedBack : React.FC<Props> = (props) =>  {
       <div className="wrapper">
         <div className='feeback-header'>
           <div style={{display: 'flex', alignItems: 'center'}}>
-            <IonIcon icon={checkmarkCircle} />
-            <h2>Bonne réponse !</h2>
+            {props.feedback?.success ? <>
+              <IonIcon color={'success'} icon={checkmarkCircle} />
+              <h2>Bonne réponse !</h2> 
+            </> : <>
+              <IonIcon color={'danger'} icon={closeCircleSharp} />
+              <h4>{ "La bonne réponse est : " + props.feedback?.goodAnswer.name }</h4>
+            </>}
           </div>
-          <div>
+          {/* <div>
             <IonIcon icon={flag} />
-          </div>
+          </div> */}
         </div>
         <div style={{textAlign: 'center'}}>
-          <IonButton size='default' style={{width: '90%', fontWeight: 'bold'}} onClick={props.nextQuiz}>Continuer</IonButton>
+          <IonButton color={props.feedback?.success ? 'success':'danger'} size='default' style={{width: '90%', fontWeight: 'bold', color: 'black', fontSize: '1.1em'}} onClick={props.nextQuiz}>Continuer</IonButton>
         </div>
       </div>
     </IonModal>
