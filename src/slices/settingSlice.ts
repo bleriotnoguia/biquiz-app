@@ -3,11 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface SettingState {
   isEasy: boolean;
   isDarkMode: boolean;
+  language: string;
   displaySource: boolean;
 }
 
 const defaultSettingState: SettingState = {
     isEasy: localStorage.isEasy ? JSON.parse(localStorage.isEasy) : true,
+    language: localStorage.language ? localStorage.language : 'fr',
     isDarkMode: localStorage.isDarkMode ? JSON.parse(localStorage.isDarkMode) : false,
     displaySource: localStorage.displaySource ? JSON.parse(localStorage.displaySource) : false
 }
@@ -32,6 +34,10 @@ const settingSlice = createSlice({
     setDisplaySource: (state, data) => {
       state.displaySource = data.payload
       localStorage.displaySource = data.payload
+    },
+    setLanguage: (state, data) => {
+      state.language = data.payload
+      localStorage.language = data.payload
     }
   }
 });
@@ -40,6 +46,7 @@ const settingSlice = createSlice({
 export const {
     setIsEasy,
     setIsDarkMode,
+    setLanguage,
     setDisplaySource
 } = settingSlice.actions;
 

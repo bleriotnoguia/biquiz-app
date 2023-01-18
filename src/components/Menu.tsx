@@ -15,6 +15,7 @@ import { alertCircleSharp, alertCircleOutline, settingsOutline, settingsSharp, s
 import './Menu.css';
 import {SocialSharing} from '@awesome-cordova-plugins/social-sharing'
 import { App } from '@capacitor/app';
+import { useTranslation } from 'react-i18next';
 
 interface AppPage {
   url: string;
@@ -27,43 +28,44 @@ const shareApp = () => {
   SocialSharing.share("J'ai utilisé cette application et je pense que toi aussi tu l'apprécieras", "Merci d'installer cette application", "", "biquiz.bleriotnoguia.com")
 }
 
-const appPages: AppPage[] = [
-  {
-    title: 'Accueil',
-    url: '/',
-    iosIcon: homeOutline,
-    mdIcon: homeSharp
-  },
-  {
-    title: 'À propos',
-    url: '/page/About',
-    iosIcon: alertCircleOutline,
-    mdIcon: alertCircleSharp
-  },
-  {
-    title: 'Paramètres',
-    url: '/page/settings',
-    iosIcon: settingsOutline,
-    mdIcon: settingsSharp
-  },
-  // {
-  //   title: 'Autres jeux',
-  //   url: '/page/Games',
-  //   iosIcon: sparklesOutline,
-  //   mdIcon: sparklesSharp
-  // }
-];
+
 
 const Menu: React.FC = () => {
-
+  const {t} = useTranslation();
   const location = useLocation();
+  const appPages: AppPage[] = [
+    {
+      title: t('home'),
+      url: '/',
+      iosIcon: homeOutline,
+      mdIcon: homeSharp
+    },
+    {
+      title: t('about'),
+      url: '/page/About',
+      iosIcon: alertCircleOutline,
+      mdIcon: alertCircleSharp
+    },
+    {
+      title: t('settings'),
+      url: '/page/settings',
+      iosIcon: settingsOutline,
+      mdIcon: settingsSharp
+    },
+    // {
+    //   title: 'Autres jeux',
+    //   url: '/page/Games',
+    //   iosIcon: sparklesOutline,
+    //   mdIcon: sparklesSharp
+    // }
+  ];
 
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
           <IonListHeader>Biquiz</IonListHeader>
-          <IonNote>Quiz biblique</IonNote>
+          <IonNote>{t('appSubTitle')}</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
@@ -77,7 +79,7 @@ const Menu: React.FC = () => {
           <IonMenuToggle autoHide={false}>
             <IonItem className={location.pathname === '/page/Share' ? 'selected' : ''} onClick={() => shareApp()} routerDirection="none" lines="none" detail={false}>
               <IonIcon slot="start" ios={shareSocialOutline} md={shareSocialSharp} />
-              <IonLabel>Partager</IonLabel>
+              <IonLabel>{t('share')}</IonLabel>
             </IonItem>
           </IonMenuToggle>
           {/* <IonMenuToggle autoHide={false}>

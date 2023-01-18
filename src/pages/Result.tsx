@@ -6,11 +6,13 @@ import { Choice, deleteChoices } from '../slices/currentQuizSlice';
 import { useHistory, useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { checkIsCorrect, getStars } from '../utils';
+import { useTranslation } from 'react-i18next';
 
 const Result: React.FC = () => {
   const choices = useAppSelector(state => state.currentQuiz.choices)
   const questions = useAppSelector(state => state.currentQuiz.questions)
   const { category_id } = useParams<{ category_id: string }>();
+  const {t} = useTranslation();
   const dispatch = useDispatch()
   let history = useHistory()
 
@@ -26,7 +28,7 @@ const Result: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Résultat</IonTitle>
+          <IonTitle>{t('result')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -43,15 +45,15 @@ const Result: React.FC = () => {
           {getStars((choices.filter((item: Choice) => checkIsCorrect(item, questions)).length * 5) / choices.length)}
         </div>
         <div>
-          <h2>Quiz terminé avec succès</h2>
-          <p>Vous avez fait {choices.length} questions et à partir de cela {choices.filter((item: Choice) => checkIsCorrect(item, questions)).length} réponse(s) sont correctes dans le quiz</p>
+          <h2>{t('resultTitle')}</h2>
+          <p>{t('resultDescription1')} {choices.length} {t('resultDescription2')} {choices.filter((item: Choice) => checkIsCorrect(item, questions)).length} {t('resultDescription3')}</p>
         </div>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonButton onClick={() => replay()} color="primary"><IonIcon icon={refreshSharp} slot="start" /> Rejouer</IonButton>
+            <IonButton onClick={() => replay()} color="primary"><IonIcon icon={refreshSharp} slot="start" />{t('replay')}</IonButton>
           </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonButton routerLink='/page/answers' color="primary"><IonIcon icon={eyeSharp} slot="start" /> Voir la corrections</IonButton>
+            <IonButton routerLink='/page/answers' color="primary"><IonIcon icon={eyeSharp} slot="start" /> {t('displayAnswers')}</IonButton>
           </IonRow>
         </IonGrid>
       </IonContent>

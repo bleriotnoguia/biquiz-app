@@ -18,6 +18,7 @@ import {
 } from "@ionic/react";
 import { checkmarkCircle, closeCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useHistory } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
@@ -42,6 +43,7 @@ const Quiz: React.FC = () => {
   const [showSource, setShowSource] = useState(false);
   const [feedback, setFeedBack] = useState<{goodAnswer: QuestionOption, success: boolean}>()
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
 
   const handleOpenModal = () => {
     setFeedBackIsOpen(true);
@@ -146,7 +148,7 @@ const Quiz: React.FC = () => {
               <IonButton onClick={() => setShowSource(!showSource)}>
                 {showSource
                   ? questions[questionIndex].source_text
-                  : "Voir la source"}
+                  : t('displaySource')}
               </IonButton>
             )}
           </div>

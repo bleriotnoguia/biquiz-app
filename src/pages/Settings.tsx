@@ -13,14 +13,17 @@ import {
   IonAlert,
 } from "@ionic/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../hooks";
-import { setIsDarkMode, setIsEasy, setDisplaySource } from "../slices/settingSlice";
+import { setIsDarkMode, setLanguage, setDisplaySource } from "../slices/settingSlice";
 import "./Settings.css";
 
 const Settings: React.FC = () => {
+  const language = useAppSelector((state) => state.setting.language);
   const isDarkMode = useAppSelector((state) => state.setting.isDarkMode);
   const displaySource = useAppSelector((state) => state.setting.displaySource);
+  const {t, i18n} = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
   const dispatch = useDispatch();
 
@@ -31,7 +34,7 @@ const Settings: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/" />
           </IonButtons>
-          <IonTitle>Paramètres</IonTitle>
+          <IonTitle>{t('settings')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -40,32 +43,33 @@ const Settings: React.FC = () => {
           <IonAlert
             isOpen={showAlert}
             onDidDismiss={() => setShowAlert(false)}
-            header={"Choisir un niveau"}
-            message={"Le niveau difficile desactive l'aide"}
+            header={"Choisir une langue"}
             buttons={[
               {
-                text: "Difficile",
+                text: t('french'),
                 cssClass: "secondary",
                 handler: () => {
-                  dispatch(setIsEasy(false));
+                  i18n.changeLanguage('fr')
+                  dispatch(setLanguage('fr'));
                 },
               },
               {
-                text: "Facile",
+                text: t('english'),
                 handler: () => {
-                  dispatch(setIsEasy(true));
+                  i18n.changeLanguage('en')
+                  dispatch(setLanguage('en'));
                 },
               },
             ]}
           />
-          {/* <IonItem>
-          <IonLabel onClick={() => setShowAlert(true)}>
-            <h3>Niveau</h3>
-            <p>{isEasy ? 'Facile' : 'Difficile'}</p>
-          </IonLabel>
-        </IonItem> */}
           <IonItem>
-            <IonLabel>Thème sombre</IonLabel>
+          <IonLabel onClick={() => setShowAlert(true)}>
+            <h2>{t('langOption')}</h2>
+            <p>{language === 'fr' ? t('french') : t('english')}</p>
+          </IonLabel>
+        </IonItem>
+          <IonItem>
+            <IonLabel>{t('darkMode')}</IonLabel>
             <IonToggle
               slot="end"
               id="themeToggle"
@@ -74,7 +78,7 @@ const Settings: React.FC = () => {
             ></IonToggle>
           </IonItem>
           <IonItem>
-            <IonLabel>Montrer la source dans le quiz</IonLabel>
+            <IonLabel>{t('displaySourceInQuiz')}</IonLabel>
             <IonToggle
               slot="end"
               id="themeToggle"

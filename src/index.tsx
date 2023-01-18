@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import { store } from './Store';
 
+import './i18n'
+
 const container = document.getElementById('root')
 const root = createRoot(container!)
 

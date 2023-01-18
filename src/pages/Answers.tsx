@@ -1,13 +1,14 @@
-import {useState, useEffect} from 'react'
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { checkboxSharp, checkmarkSharp, closeSharp, stopOutline } from 'ionicons/icons';
-import { Choice, Question, QuestionOption } from '../slices/currentQuizSlice';
+import { Choice, QuestionOption } from '../slices/currentQuizSlice';
 import { useAppSelector } from '../hooks';
 import '../App.css';
+import { useTranslation } from 'react-i18next';
 
 const Answers: React.FC = () => {
   const questions = useAppSelector(state => state.currentQuiz.questions)
   const choices = useAppSelector(state => state.currentQuiz.choices)
+  const {t} = useTranslation();
 
   const checkIsCorrect = (item: Choice) => {
     let question = questions.find(q => q.id === item.question_id)
@@ -34,14 +35,14 @@ const Answers: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/" />
           </IonButtons>
-          <IonTitle>Résultat</IonTitle>
+          <IonTitle>{t('result')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
         <div className="ion-padding-start">
           <IonText color="primary" >
-            <h4>Corrections</h4>
+            <h4>{t('answers')}</h4>
           </IonText>
         </div>
           <IonItemDivider>

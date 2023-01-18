@@ -23,8 +23,10 @@ import { useEffect, useState } from "react";
 import { CategoryConfig, fetchCategories } from "../../slices/categoriesSlice";
 import { deleteChoices } from "../../slices/currentQuizSlice";
 import { getStars } from "../../utils";
+import { useTranslation } from "react-i18next";
 
 const Home: React.FC = () => {
+  const { t } = useTranslation()
   const [showAlert, setShowAlert] = useState(false);
   const [starsRequired, setStarsRequired] = useState(0)
   const categories = useAppSelector((state) => state.categories);
@@ -54,7 +56,7 @@ const Home: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Accueil</IonTitle>
+          <IonTitle>{t('home')}</IonTitle>
           <IonButtons slot="end">
             <IonButton>
               <b style={{ marginRight: "3px", fontSize: "1.15em" }}>
@@ -68,7 +70,7 @@ const Home: React.FC = () => {
 
       <IonContent fullscreen>
         <h3 style={{ padding: "0px 0.7em", textAlign: "center" }}>
-          Selectionner une categories
+          {t('homeTitle')}
         </h3>
         {[...categories.data].sort((a, b) => a.level - b.level).map((category, idx) => {
           let isLock = totalStars < (category.level-1)*5
@@ -95,7 +97,7 @@ const Home: React.FC = () => {
                   </div>
                   {/* <p>{category?.description}</p> */}
                   <p style={{ marginTop: "0" }}>
-                    Testez votre connaissance des écritures
+                    {t('categoryDescription')}
                   </p>
                   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                     <div style={{ fontSize: "1.5em" }}>
