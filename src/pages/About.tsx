@@ -1,10 +1,12 @@
 import { IonAlert, IonBackButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import {useState} from 'react'
 import {SocialSharing} from '@awesome-cordova-plugins/social-sharing'
+import { useTranslation } from 'react-i18next';
 
 const About: React.FC = () => {
 
   const [showAlert, setShowAlert] = useState(false);
+  const {t} = useTranslation();
 
   const contactDev = () => {
     SocialSharing.shareViaEmail('Body', 'Utilisateur de biquiz', ['contact@bleriotnoguia.com']).then(() => {
@@ -26,7 +28,7 @@ const About: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/" />
           </IonButtons>
-          <IonTitle>À propos</IonTitle>
+          <IonTitle>{t('about')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -34,20 +36,20 @@ const About: React.FC = () => {
       <IonList>
         <IonItem>
           <IonLabel onClick={() => contactDev()}>
-            <h3>Email au  programmeur</h3>
-            <p color="gray">Envoyer un email au  programmeur</p>
+            <h3>{t('contactDev')}</h3>
+            <p color="gray">{t('emailDev')}</p>
           </IonLabel>
         </IonItem>
         <IonItem>
           <IonLabel onClick={() => shareApp()}>
-            <h3>Recommander</h3>
-            <p color="gray">Partager l'application</p>
+            <h3>{t('share')}</h3>
+            <p color="gray">{'shareApp'}</p>
           </IonLabel>
         </IonItem>
         <IonItem>
           <IonLabel onClick={() => window.open("https://www.bleriotnoguia.com")}>
-            <h3>Noter</h3>
-            <p color="gray">Noter l’application</p>
+            <h3>{t('rate')}</h3>
+            <p color="gray">{t('rateApp')}</p>
           </IonLabel>
         </IonItem>
         <IonItem>
@@ -59,13 +61,13 @@ const About: React.FC = () => {
             buttons={['OK']}
           />
           <IonLabel onClick={() => setShowAlert(true)}>
-            <h3>Règle de confidentialité et condition  d’utilisation</h3>
-            <p color="gray">Appuyer pour plus d’informations</p>
+            <h3>{t('privacyRule')}</h3>
+            <p color="gray">{t('clickForMoreInfo')}</p>
           </IonLabel>
         </IonItem>
         <IonItem>
           <IonLabel>
-            <h3>Version de l'application</h3>
+            <h3>{t('versionApp')}</h3>
             <p color="gray">1.0</p>
           </IonLabel>
         </IonItem>

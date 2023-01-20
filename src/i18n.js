@@ -18,6 +18,7 @@ i18next
             appSubTitle: 'Bible quiz',
             about: 'About',
             share: 'Share',
+            shareApp: 'Share app',
             homeTitle: 'Select one category',
             categoryDescription: 'Test your knowledge of the scriptures',
             displaySource: 'Display source',
@@ -31,7 +32,14 @@ i18next
             answers: 'Answers',
             goodAnswer: 'Good answer !',
             theGoodAnswerIs: 'The good answer is : ',
-            continue: 'Continue'
+            continue: 'Continue',
+            contactDev: 'Contact the developer',
+            emailDev: 'Email Developer',
+            rate: 'Rate',
+            rateApp: 'Rate the app',
+            versionApp: "Application version",
+            privacyRule: 'Privacy rule',
+            clickForMoreInfo: 'Click for more informations'
           }
         },
         fr: {
@@ -46,6 +54,7 @@ i18next
             appSubTitle: 'Quiz biblique',
             about: 'À propos',
             share: 'Partager',
+            shareApp: "Partager l'application",
             homeTitle: 'Selectionner une categorie',
             categoryDescription: 'Testez votre connaissance des écritures',
             displaySource: 'Voir la source',
@@ -59,7 +68,14 @@ i18next
             answers: 'Réponses',
             goodAnswer: 'Bonne réponse !',
             theGoodAnswerIs: 'La bonne réponse est : ',
-            continue: 'Continuer'
+            continue: 'Continuer',
+            contactDev: 'Contacter le développeur',
+            emailDev: 'Envoyer un email au développeur',
+            rate: 'Noter',
+            rateApp: "Noter l'application",
+            versionApp: "Version de l'application",
+            privacyRule: 'Règle de confidentialité',
+            clickForMoreInfo: 'Appuyer pour plus d’informations'
           }
         }
     }
