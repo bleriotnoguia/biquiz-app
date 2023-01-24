@@ -43,7 +43,7 @@ const About: React.FC = () => {
         <IonItem>
           <IonLabel onClick={() => shareApp()}>
             <h3>{t('share')}</h3>
-            <p color="gray">{'shareApp'}</p>
+            <p color="gray">{t('shareApp')}</p>
           </IonLabel>
         </IonItem>
         <IonItem>
