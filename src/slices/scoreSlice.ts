@@ -43,12 +43,16 @@ const scoresSlice = createSlice({
        * In the future we might use the "redux-persist" package to handle this stuff
        * */
     },
+    resetProgress: (state) => {
+      state.data = []
+    }
   }
 });
 
 //actions
 export const {
     setScore,
+    resetProgress,
 } = scoresSlice.actions;
 
 export const scoresReducer = scoresSlice.reducer

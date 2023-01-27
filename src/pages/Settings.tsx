@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { fetchCategories } from "../slices/categoriesSlice";
+import { resetProgress } from "../slices/scoreSlice";
 import { setIsDarkMode, setLanguage, setDisplaySource } from "../slices/settingSlice";
 import "./Settings.css";
 
@@ -25,6 +26,7 @@ const Settings: React.FC = () => {
   const displaySource = useAppSelector((state) => state.setting.displaySource);
   const {t, i18n} = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
+  const [showResetAlert, setShowResetAlert] = useState(false);
   const dispatch = useAppDispatch();
 
   return (
@@ -64,12 +66,35 @@ const Settings: React.FC = () => {
               },
             ]}
           />
+          <IonAlert
+            isOpen={showResetAlert}
+            onDidDismiss={() => setShowResetAlert(false)}
+            header={"Reset you progress"}
+            subHeader={"Do you realy what to reset your progress ?"}
+            buttons={[
+              {
+                text: t('yes'),
+                cssClass: "secondary",
+                handler: () => {
+                  dispatch(resetProgress());
+                },
+              },
+              {
+                text: t('no'),
+              },
+            ]}
+          />
           <IonItem>
-          <IonLabel onClick={() => setShowAlert(true)}>
-            <h2>{t('langOption')}</h2>
-            <p>{language === 'fr' ? t('french') : t('english')}</p>
-          </IonLabel>
-        </IonItem>
+            <IonLabel onClick={() => setShowAlert(true)}>
+              <h2>{t('langOption')}</h2>
+              <p>{language === 'fr' ? t('french') : t('english')}</p>
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel onClick={() => setShowResetAlert(true)}>
+              Reset your progress
+            </IonLabel>
+          </IonItem>
           <IonItem>
             <IonLabel>{t('darkMode')}</IonLabel>
             <IonToggle

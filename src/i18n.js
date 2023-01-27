@@ -39,7 +39,10 @@ i18next
             rateApp: 'Rate the app',
             versionApp: "Application version",
             privacyRule: 'Privacy rule',
-            clickForMoreInfo: 'Click for more informations'
+            clickForMoreInfo: 'Click for more informations',
+            loading: 'Loading...',
+            yes: 'Yes',
+            no: 'No'
           }
         },
         fr: {
@@ -75,7 +78,10 @@ i18next
             rateApp: "Noter l'application",
             versionApp: "Version de l'application",
             privacyRule: 'Règle de confidentialité',
-            clickForMoreInfo: 'Appuyer pour plus d’informations'
+            clickForMoreInfo: 'Appuyer pour plus d’informations',
+            loading: 'Chargement...',
+            yes: 'Oui',
+            no: 'Non'
           }
         }
     }
