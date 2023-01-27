@@ -26,7 +26,7 @@ const defaultCategoriesState: CategoriesState = {
 
 export const fetchCategories = createAsyncThunk("categories/fetch", async () => {
   const lang = localStorage.language ? localStorage.language : 'fr'
-  const res = await axios.get(`http://localhost:8000/api/${lang}/question-categories`)
+  const res = await axios.get(`https://biquiz.herokuapp.com/api/${lang}/question-categories`)
   return res.data
   }
 );
