@@ -11,7 +11,7 @@ const defaultSettingState: SettingState = {
     isEasy: localStorage.isEasy ? JSON.parse(localStorage.isEasy) : true,
     language: localStorage.language ? localStorage.language : 'fr',
     isDarkMode: localStorage.isDarkMode ? JSON.parse(localStorage.isDarkMode) : false,
-    displaySource: localStorage.displaySource ? JSON.parse(localStorage.displaySource) : false
+    displaySource: localStorage.displaySource ? JSON.parse(localStorage.displaySource) : true
 }
 
 const settingSlice = createSlice({

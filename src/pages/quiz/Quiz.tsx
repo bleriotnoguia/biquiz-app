@@ -88,9 +88,9 @@ const Quiz: React.FC = () => {
           .length *
           5) /
         choices.length;
-      let category_score = scores.find(
+      let category_score = scores.length ? scores.find(
         (score) => score.category_id === category_id
-      );
+      ) : undefined;
       if (
         !category_score ||
         (category_score && category_score.stars < stars_won)
@@ -103,6 +103,7 @@ const Quiz: React.FC = () => {
     }
     handleCloseModal();
     setChoiceId(undefined);
+    setShowSource(false);
   }
 
   useEffect(() => {

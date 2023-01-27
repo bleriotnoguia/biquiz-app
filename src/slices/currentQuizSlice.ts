@@ -35,7 +35,8 @@ const defaultCurrentQuizState:CurrentQuizState = {
 }
 
 export const fetchQuestions = createAsyncThunk("questions/fetch", async (arg: {category_id: string}) => {
-    const res = await axios.get(`https://biquiz.herokuapp.com/api/question-category/${arg.category_id}`)
+    const lang = localStorage.language ? localStorage.language : 'fr'
+    const res = await axios.get(`https://biquiz.herokuapp.com/api/${lang}/question-category/${arg.category_id}`)
     return res.data
     }
   );
