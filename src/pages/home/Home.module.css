@@ -47,3 +47,19 @@
   color: white;
   right: 0;
 }
+
+.iconCategoryFooter{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iconCategoryContent{
+  margin-top: 0px;
+}
+
+@media only screen and (max-width: 375px)  {
+  .iconCategoryContent{
+    margin-bottom: 7px;
+  }
+}

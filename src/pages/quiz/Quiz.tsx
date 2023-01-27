@@ -35,6 +35,7 @@ import "./Quiz.css";
 const Quiz: React.FC = () => {
   const displaySource = useAppSelector((state) => state.setting.displaySource);
   const questions = useAppSelector((state) => state.currentQuiz.questions);
+  const loading = useAppSelector((state) => state.currentQuiz.loading);
   const choices = useAppSelector((state) => state.currentQuiz.choices);
   const scores = useAppSelector((state) => state.scores.data);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -129,10 +130,14 @@ const Quiz: React.FC = () => {
             justifyContent: "center",
           }}
         >
-          <IonProgressBar
+          { loading ?
+          <IonProgressBar 
+            style={{ height: "0.5em" }} 
+            type="indeterminate"
+          ></IonProgressBar> : <IonProgressBar
             style={{ height: "0.5em" }}
             value={questionIndex / questions.length}
-          ></IonProgressBar>
+          ></IonProgressBar>}
         </div>
         <IonText
           style={{

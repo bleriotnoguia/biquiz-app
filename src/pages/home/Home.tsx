@@ -102,10 +102,10 @@ const Home: React.FC = () => {
                     {isLock && <IonIcon style={{ fontSize: "1.2em" }} icon={lockClosed} />}
                   </div>
                   {/* <p>{category?.description}</p> */}
-                  <p style={{ marginTop: "0" }}>
+                  <p className={styles.iconCategoryContent}>
                     {t('categoryDescription')}
                   </p>
-                  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                  <div className={styles.iconCategoryFooter}>
                     <div style={{ fontSize: "1.5em" }}>
                       {getStars(category_score?.stars ?? 0)}
                     </div>
