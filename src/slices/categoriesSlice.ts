@@ -45,6 +45,7 @@ const categoriesSlice = createSlice({
     },
     [fetchCategories.rejected.type]: (state, action) => {
       console.error(action);
+      state.error = action.error
       state.loading = false;
     },
   },

@@ -11,6 +11,11 @@
   text-decoration: none;
 }
 
+.titleStyle{ 
+  padding: 0px 0.7em;
+  text-align: center;
+}
+
 .linkStyle h1 {
   text-transform: capitalize;
 }

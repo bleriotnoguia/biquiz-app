@@ -24,6 +24,8 @@ import { CategoryConfig, fetchCategories } from "../../slices/categoriesSlice";
 import { deleteChoices } from "../../slices/currentQuizSlice";
 import { getStars } from "../../utils";
 import { useTranslation } from "react-i18next";
+import CategoriesLoading from "./CategoriesLoading";
+import { NetworkError } from "./NetworkError";
 
 const Home: React.FC = () => {
   const { t } = useTranslation()
@@ -32,7 +34,7 @@ const Home: React.FC = () => {
   const categories = useAppSelector((state) => state.categories);
   const scores = useAppSelector((state) => state.scores.data);
   const dispatch = useAppDispatch();
-  const totalStars = scores.map((a) => a.stars).reduce((p, n) => p + n)
+  const totalStars = scores.length ? scores.map((a) => a.stars).reduce((p, n) => p + n) : 0
   let history = useHistory()
 
   function startQuiz(isLock: boolean, category: CategoryConfig){
@@ -47,7 +49,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchCategories());
-  }, []);
+  }, [dispatch]);
 
   return (
     <IonPage>
@@ -67,16 +69,20 @@ const Home: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-
-      <IonContent fullscreen>
-        <h3 style={{ padding: "0px 0.7em", textAlign: "center" }}>
+        <IonContent fullscreen>
+      {
+        categories.loading ? 
+        <CategoriesLoading />
+          : categories.error ? <NetworkError /> :
+        <>
+        <h3 className={styles.titleStyle}>
           {t('homeTitle')}
         </h3>
         {[...categories.data].sort((a, b) => a.level - b.level).map((category, idx) => {
           let isLock = totalStars < (category.level-1)*5
-          let category_score = scores.find(
+          let category_score = scores.length ? scores.find(
             (score) => parseInt(score.category_id) === category?.id
-          );
+          ) : undefined;
           return (
             <div className={styles.cardCategory} key={idx}>
               <IonIcon
@@ -110,6 +116,9 @@ const Home: React.FC = () => {
             </div>
           );
         })}
+      </>
+      }
+
       </IonContent>
       <IonAlert
         isOpen={showAlert}
