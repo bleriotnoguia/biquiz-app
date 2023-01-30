@@ -84,44 +84,46 @@ const Home: React.FC = () => {
         <h3 className={styles.titleStyle}>
           {t('homeTitle')}
         </h3>
+        <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
         {[...categories.data].sort((a, b) => a.level - b.level).map((category, idx) => {
           let isLock = totalStars < (category.level-1)*5
           let category_score = scores.length ? scores.find(
             (score) => parseInt(score.category_id) === category?.id
           ) : undefined;
           return (
-            <div className={styles.cardCategory} key={idx}>
-              <IonIcon
-                icon={bookSharp}
-                slot="start"
-                className={styles.iconCategory}
-              />
-              <div
-                onClick={() => startQuiz(isLock, category)}
-                className={styles.linkStyle}
-              >
-                <div>
-                  <div className={styles.cardCategoryHeader}>
-                    <h1 className={styles.cardCategoryTitle}>
-                      {category?.name}
-                    </h1>
-                    {isLock && <IonIcon style={{ fontSize: "1.2em" }} icon={lockClosed} />}
-                  </div>
-                  {/* <p>{category?.description}</p> */}
-                  <p className={styles.iconCategoryContent}>
-                    {t('categoryDescription')}
-                  </p>
-                  <div className={styles.iconCategoryFooter}>
-                    <div style={{ fontSize: "1.5em" }}>
-                      {getStars(category_score?.stars ?? 0)}
+              <div className={styles.cardCategory} key={idx}>
+                <IonIcon
+                  icon={bookSharp}
+                  slot="start"
+                  className={styles.iconCategory}
+                />
+                <div
+                  onClick={() => startQuiz(isLock, category)}
+                  className={styles.linkStyle}
+                >
+                  <div>
+                    <div className={styles.cardCategoryHeader}>
+                      <h1 className={styles.cardCategoryTitle}>
+                        {category?.name}
+                      </h1>
+                      {isLock && <IonIcon style={{ fontSize: "1.2em" }} icon={lockClosed} />}
                     </div>
-                    <span><b>{category.level} </b><IonIcon icon={statsChart} /></span>
+                    {/* <p>{category?.description}</p> */}
+                    <p className={styles.iconCategoryContent}>
+                      {t('categoryDescription')}
+                    </p>
+                    <div className={styles.iconCategoryFooter}>
+                      <div style={{ fontSize: "1.5em" }}>
+                        {getStars(category_score?.stars ?? 0)}
+                      </div>
+                      <span><b>{category.level} </b><IonIcon icon={statsChart} /></span>
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
           );
         })}
+        </div>
       </>
       }
 
