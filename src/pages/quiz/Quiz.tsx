@@ -29,6 +29,7 @@ import {
 } from "../../slices/currentQuizSlice";
 import { setScore } from "../../slices/scoreSlice";
 import { checkIsCorrect } from "../../utils";
+import QuizLoading from "../home/QuizLoading";
 import FeedBack from "./FeedBack";
 import "./Quiz.css";
 
@@ -123,92 +124,94 @@ const Quiz: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <div
-          style={{
-            padding: "1em 1em 0px 1em",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          { loading ?
-          <IonProgressBar 
-            style={{ height: "0.5em" }} 
-            type="indeterminate"
-          ></IonProgressBar> : <IonProgressBar
-            style={{ height: "0.5em" }}
-            value={questionIndex / questions.length}
-          ></IonProgressBar>}
-        </div>
-        <IonText
-          style={{
-            padding: "0px 1em 0px 1em",
-            textAlign: "center",
-            color: "#303030",
-          }}
-        >
-          <h3 style={{ fontWeight: "bold" }}>
-            {questions[questionIndex] ? questions[questionIndex].name : ""}
-          </h3>
-          <div style={{ textAlign: "center" }}>
-            {displaySource && (
-              <IonButton onClick={() => setShowSource(!showSource)}>
-                {showSource
-                  ? questions[questionIndex].source_text
-                  : t('displaySource')}
-              </IonButton>
-            )}
-          </div>
-        </IonText>
-        <IonList>
-          <IonRadioGroup value={choiceId}>
-            {questions[questionIndex] &&
-              questions[questionIndex].options.map((option, id) => (
-                <IonItem key={id}>
-                  <IonRadio
-                    slot="start"
-                    value={option.id}
-                    onClick={() => handleSetChoiceId(option.id)}
-                  />{" "}
-                  <IonLabel
-                    color={
-                      choiceId && option.is_correct === true
-                        ? "success"
-                        : choiceId &&
-                          choiceId === option.id &&
-                          option.is_correct === false
-                        ? "danger"
-                        : ""
-                    }
-                  >
-                    {option.name}
-                  </IonLabel>{" "}
-                  {choiceId && option.is_correct === true && (
-                    <IonIcon
-                      slot="end"
-                      color="success"
-                      icon={checkmarkCircle}
-                    />
-                  )}{" "}
-                  {choiceId &&
-                    choiceId === option.id &&
-                    option.is_correct === false && (
-                      <IonIcon slot="end" color="danger" icon={closeCircle} />
-                    )}
-                </IonItem>
-              ))}
-          </IonRadioGroup>
-        </IonList>
-        <IonText style={{ textAlign: "center" }}>
-          <h5
-            style={{
-              fontWeight: "bold",
-              backgroundColor: "lightgray",
-              padding: "0.5em 0",
-            }}
-          >
-            Question {questionIndex + 1}/{questions.length}
-          </h5>
-        </IonText>
+        {
+          loading ?
+          <QuizLoading />
+           : <>
+              <div
+              style={{
+                padding: "1em 1em 0px 1em",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+            <IonProgressBar
+              style={{ height: "0.5em" }}
+              value={questionIndex / questions.length}
+            ></IonProgressBar>
+            </div>
+            <IonText
+              style={{
+                padding: "0px 1em 0px 1em",
+                textAlign: "center",
+                color: "#303030",
+              }}
+            >
+              <h3 style={{ fontWeight: "bold" }}>
+                {questions[questionIndex] ? questions[questionIndex].name : ""}
+              </h3>
+              <div style={{ textAlign: "center" }}>
+                {displaySource && (
+                  <IonButton onClick={() => setShowSource(!showSource)}>
+                    {showSource
+                      ? questions[questionIndex].source_text
+                      : t('displaySource')}
+                  </IonButton>
+                )}
+              </div>
+            </IonText>
+            <IonList>
+              <IonRadioGroup value={choiceId}>
+                {questions[questionIndex] &&
+                  questions[questionIndex].options.map((option, id) => (
+                    <IonItem key={id}>
+                      <IonRadio
+                        slot="start"
+                        value={option.id}
+                        onClick={() => handleSetChoiceId(option.id)}
+                      />{" "}
+                      <IonLabel
+                        color={
+                          choiceId && option.is_correct === true
+                            ? "success"
+                            : choiceId &&
+                              choiceId === option.id &&
+                              option.is_correct === false
+                            ? "danger"
+                            : ""
+                        }
+                      >
+                        {option.name}
+                      </IonLabel>{" "}
+                      {choiceId && option.is_correct === true && (
+                        <IonIcon
+                          slot="end"
+                          color="success"
+                          icon={checkmarkCircle}
+                        />
+                      )}{" "}
+                      {choiceId &&
+                        choiceId === option.id &&
+                        option.is_correct === false && (
+                          <IonIcon slot="end" color="danger" icon={closeCircle} />
+                        )}
+                    </IonItem>
+                  ))}
+              </IonRadioGroup>
+            </IonList>
+            <IonText style={{ textAlign: "center" }}>
+              <h5
+                style={{
+                  fontWeight: "bold",
+                  backgroundColor: "lightgray",
+                  padding: "0.5em 0",
+                }}
+              >
+                Question {questionIndex + 1}/{questions.length}
+              </h5>
+            </IonText>
+          </>
+        }
       </IonContent>
       <FeedBack
         feedback={feedback}
