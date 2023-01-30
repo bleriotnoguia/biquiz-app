@@ -1,7 +1,6 @@
-import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact  } from '@ionic/react';
+import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact  } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Route } from 'react-router-dom';
-import Menu from './components/Menu';
 import Settings from './pages/Settings';
 import About from './pages/About';
 import Quiz from './pages/quiz/Quiz';
@@ -32,7 +31,8 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Games from './pages/Games';
 import GameDetails from './pages/GameDetails';
-import {useEffect} from 'react'
+import {useEffect} from 'react';
+import { homeSharp, informationCircle, settingsSharp } from 'ionicons/icons';
 
 setupIonicReact();
 
@@ -51,35 +51,39 @@ useEffect(() => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <Menu />
-          <IonRouterOutlet id="main">
-            <Route path="/" exact={true}>
-              <Home />
-            </Route>
-            <Route path="/page/settings">
-              <Settings />
-            </Route>
-            <Route path="/page/about">
-              <About />
-            </Route>
-            <Route path="/page/quiz/category/:category_id">
-              <Quiz />
-            </Route>
-            <Route path="/page/result/:category_id">
-              <Result />
-            </Route>
-            <Route path="/page/answers">
-              <Answers />
-            </Route>
-            <Route path="/page/games">
-              <Games />
-            </Route>
-            <Route path="/page/game/:id">
-              <GameDetails />
-            </Route>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/:tab(settings)" component={Settings} />
+            <Route path="/:tab(about)" component={About}  />
+            <Route path="/" component={Home} exact={true} />
+            <Route path="/page/quiz/category/:category_id" component={Quiz} />
+            <Route path="/page/result/:category_id" component={Result} />
+            <Route path="/page/answers" component={Answers} />
+            <Route path="/:tab(games)" component={Games} />
+            <Route path="/page/game/:id" component={GameDetails} />
           </IonRouterOutlet>
-        </IonSplitPane>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="home" href='/'>
+              <IonIcon icon={homeSharp} />
+              <IonLabel>Home</IonLabel>
+            </IonTabButton>
+
+            <IonTabButton tab="settings" href='/settings'>
+              <IonIcon icon={settingsSharp} />
+              <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+
+            <IonTabButton tab="about" href='/about'>
+              <IonIcon icon={informationCircle} />
+              <IonLabel>About</IonLabel>
+            </IonTabButton>
+
+            {/* <IonTabButton tab="games" href='/games'>
+              <IonIcon icon={informationCircle} />
+              <IonLabel>Games</IonLabel>
+            </IonTabButton> */}
+          </IonTabBar>
+        </IonTabs>
       </IonReactRouter>
     </IonApp>
   );

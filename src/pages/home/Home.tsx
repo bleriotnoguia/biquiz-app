@@ -2,7 +2,6 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
-  IonMenuButton,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -13,6 +12,8 @@ import {
 import {
   bookSharp,
   lockClosed,
+  shareSocialOutline,
+  shareSocialSharp,
   starSharp,
   statsChart,
 } from "ionicons/icons";
@@ -26,6 +27,7 @@ import { getStars } from "../../utils";
 import { useTranslation } from "react-i18next";
 import CategoriesLoading from "./CategoriesLoading";
 import { NetworkError } from "./NetworkError";
+import {SocialSharing} from '@awesome-cordova-plugins/social-sharing'
 
 const Home: React.FC = () => {
   const { t } = useTranslation()
@@ -47,6 +49,10 @@ const Home: React.FC = () => {
     }
   }
 
+  const shareApp = () => {
+    SocialSharing.share("J'ai utilisé cette application et je pense que toi aussi tu l'apprécieras", "Merci d'installer cette application", "", "biquiz.bleriotnoguia.com")
+  }
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
@@ -55,16 +61,16 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>{t('home')}</IonTitle>
+          <IonTitle><b>{"Biquiz"}</b></IonTitle>
           <IonButtons slot="end">
             <IonButton>
               <b style={{ marginRight: "3px", fontSize: "1.15em" }}>
                 {totalStars}
               </b>
               <IonIcon icon={starSharp} />
+            </IonButton>
+            <IonButton onClick={() => shareApp()}>
+              <IonIcon slot="start" ios={shareSocialOutline} md={shareSocialSharp} />
             </IonButton>
           </IonButtons>
         </IonToolbar>

@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { eyeSharp, refreshSharp } from 'ionicons/icons';
 import "./Result.css";
 import { useAppSelector } from '../hooks';
@@ -25,9 +25,6 @@ const Result: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
           <IonTitle>{t('result')}</IonTitle>
         </IonToolbar>
       </IonHeader>
