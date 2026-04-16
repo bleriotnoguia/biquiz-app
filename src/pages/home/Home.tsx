@@ -23,11 +23,11 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
 import { CategoryConfig, fetchCategories } from "../../slices/categoriesSlice";
 import { deleteChoices } from "../../slices/currentQuizSlice";
-import { getStars } from "../../utils";
+import { getStars, capitalizeFirstLetter } from "../../utils";
 import { useTranslation } from "react-i18next";
 import CategoriesLoading from "./CategoriesLoading";
 import { NetworkError } from "./NetworkError";
-import { Share } from '@capacitor/share';
+import { Share } from "@capacitor/share";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -36,7 +36,9 @@ const Home: React.FC = () => {
   const categories = useAppSelector((state) => state.categories);
   const scores = useAppSelector((state) => state.scores.data);
   const dispatch = useAppDispatch();
-  const totalStars = scores.length ? scores.reduce((acc, curr) => acc + curr.stars, 0) : 0;
+  const totalStars = scores.length
+    ? scores.reduce((acc, curr) => acc + curr.stars, 0)
+    : 0;
   const history = useHistory();
 
   function startQuiz(isLock: boolean, category: CategoryConfig) {
@@ -51,10 +53,10 @@ const Home: React.FC = () => {
 
   const shareApp = async () => {
     await Share.share({
-      title: 'Biquiz',
+      title: "Biquiz",
       text: "J'ai utilisé cette application et je pense que toi aussi tu l'apprécieras",
-      url: 'https://biquiz.bleriotnoguia.com',
-      dialogTitle: 'Partager Biquiz',
+      url: "https://biquiz.bleriotnoguia.com",
+      dialogTitle: "Partager Biquiz",
     });
   };
 
@@ -71,11 +73,17 @@ const Home: React.FC = () => {
           </IonTitle>
           <IonButtons slot="end">
             <IonButton>
-              <b style={{ marginRight: "4px", fontSize: "1.1em" }}>{Math.round(totalStars)}</b>
+              <b style={{ marginRight: "4px", fontSize: "1.1em" }}>
+                {Math.round(totalStars)}
+              </b>
               <IonIcon icon={starSharp} />
             </IonButton>
             <IonButton onClick={() => shareApp()}>
-              <IonIcon slot="icon-only" ios={shareSocialOutline} md={shareSocialSharp} />
+              <IonIcon
+                slot="icon-only"
+                ios={shareSocialOutline}
+                md={shareSocialSharp}
+              />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -88,19 +96,21 @@ const Home: React.FC = () => {
           <NetworkError />
         ) : (
           <>
-            <h3 className={styles.titleStyle}>{t('homeTitle')}</h3>
+            <h3 className={styles.titleStyle}>{t("homeTitle")}</h3>
             <div className={styles.categoriesGrid}>
               {[...categories.data]
                 .sort((a, b) => a.level - b.level)
                 .map((category, idx) => {
                   const isLock = totalStars < (category.level - 1) * 5;
                   const category_score = scores.length
-                    ? scores.find((score) => parseInt(score.category_id) === category?.id)
+                    ? scores.find(
+                        (score) => parseInt(score.category_id) === category?.id,
+                      )
                     : undefined;
 
                   return (
                     <div
-                      className={`${styles.cardCategory} ${isLock ? styles.cardLocked : ''}`}
+                      className={`${styles.cardCategory} ${isLock ? styles.cardLocked : ""}`}
                       key={idx}
                       onClick={() => startQuiz(isLock, category)}
                     >
@@ -111,12 +121,19 @@ const Home: React.FC = () => {
                       <div className={styles.linkStyle}>
                         <div>
                           <div className={styles.cardCategoryHeader}>
-                            <h1 className={styles.cardCategoryTitle}>{category?.name}</h1>
+                            <h1 className={styles.cardCategoryTitle}>
+                              {capitalizeFirstLetter(category?.name ?? "")}
+                            </h1>
                             {isLock && (
-                              <IonIcon className={styles.lockIcon} icon={lockClosed} />
+                              <IonIcon
+                                className={styles.lockIcon}
+                                icon={lockClosed}
+                              />
                             )}
                           </div>
-                          <p className={styles.iconCategoryContent}>{t('categoryDescription')}</p>
+                          <p className={styles.iconCategoryContent}>
+                            {t("categoryDescription")}
+                          </p>
                         </div>
                         <div className={styles.iconCategoryFooter}>
                           <div className={styles.starsWrapper}>
@@ -140,7 +157,7 @@ const Home: React.FC = () => {
         onDidDismiss={() => setShowAlert(false)}
         header={`${starsRequired} ⭐ requis`}
         message={`Il vous faut ${starsRequired} étoiles pour débloquer ce niveau !`}
-        buttons={['OK']}
+        buttons={["OK"]}
       />
     </IonPage>
   );
