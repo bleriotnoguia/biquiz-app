@@ -23,7 +23,6 @@ import {
 } from "ionicons/icons";
 import "./Menu.css";
 import { SocialSharing } from "@awesome-cordova-plugins/social-sharing";
-import { App } from "@capacitor/app";
 import { useTranslation } from "react-i18next";
 
 interface AppPage {

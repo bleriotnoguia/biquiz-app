@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createClient } from "@supabase/supabase-js";
-import { environment } from "../environments/environment";
-import axios from "axios";
+import { supabase } from "../utils/supabase";
 
 export interface QuestionOption {
   id: number;
@@ -45,11 +43,7 @@ export const fetchQuestions = createAsyncThunk(
     // const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
     // const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 
-    const supabaseUrl = environment.supabaseUrl;
-    const supabaseKey = environment.supabaseKey;
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    let { data: data_questions, error } = await supabase
+    let { data: data_questions } = await supabase
       .from("questions")
       .select(
         `id, 

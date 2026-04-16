@@ -1,12 +1,12 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useParams } from 'react-router';
 import gamesList from '../data/gamesList.json'
 import '../App.css';
 
 const GameDetails: React.FC = () => {
 
-  const { id } = useParams<{ id: string; }>();
-  const game = gamesList.find(item => item.id === parseInt(id))
+  const { id } = useParams<{ id: string }>();
+  const game = gamesList.find(item => item.id === parseInt(id ?? '0'))
 
   return (
     <IonPage>

@@ -27,31 +27,36 @@ import { getStars } from "../../utils";
 import { useTranslation } from "react-i18next";
 import CategoriesLoading from "./CategoriesLoading";
 import { NetworkError } from "./NetworkError";
-import {SocialSharing} from '@awesome-cordova-plugins/social-sharing'
+import { Share } from '@capacitor/share';
 
 const Home: React.FC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
-  const [starsRequired, setStarsRequired] = useState(0)
+  const [starsRequired, setStarsRequired] = useState(0);
   const categories = useAppSelector((state) => state.categories);
   const scores = useAppSelector((state) => state.scores.data);
   const dispatch = useAppDispatch();
-  const totalStars = scores.length ? scores.map((a) => a.stars).reduce((p, n) => p + n) : 0
-  let history = useHistory()
+  const totalStars = scores.length ? scores.reduce((acc, curr) => acc + curr.stars, 0) : 0;
+  const history = useHistory();
 
-  function startQuiz(isLock: boolean, category: CategoryConfig){
-    dispatch(deleteChoices())
-    if(isLock){
-      setStarsRequired((category.level-1)*5)
-      setShowAlert(true)
-    }else{
-      history.push(`/page/quiz/category/${category.id}`)
+  function startQuiz(isLock: boolean, category: CategoryConfig) {
+    dispatch(deleteChoices());
+    if (isLock) {
+      setStarsRequired((category.level - 1) * 5);
+      setShowAlert(true);
+    } else {
+      history.push(`/page/quiz/category/${category.id}`);
     }
   }
 
-  const shareApp = () => {
-    SocialSharing.share("J'ai utilisé cette application et je pense que toi aussi tu l'apprécieras", "Merci d'installer cette application", "", "biquiz.bleriotnoguia.com")
-  }
+  const shareApp = async () => {
+    await Share.share({
+      title: 'Biquiz',
+      text: "J'ai utilisé cette application et je pense que toi aussi tu l'apprécieras",
+      url: 'https://biquiz.bleriotnoguia.com',
+      dialogTitle: 'Partager Biquiz',
+    });
+  };
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -61,78 +66,80 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle><b>{"Biquiz"}</b></IonTitle>
+          <IonTitle>
+            <b>Biquiz</b>
+          </IonTitle>
           <IonButtons slot="end">
             <IonButton>
-              <b style={{ marginRight: "3px", fontSize: "1.15em" }}>
-                {totalStars}
-              </b>
+              <b style={{ marginRight: "4px", fontSize: "1.1em" }}>{Math.round(totalStars)}</b>
               <IonIcon icon={starSharp} />
             </IonButton>
             <IonButton onClick={() => shareApp()}>
-              <IonIcon slot="start" ios={shareSocialOutline} md={shareSocialSharp} />
+              <IonIcon slot="icon-only" ios={shareSocialOutline} md={shareSocialSharp} />
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-        <IonContent fullscreen>
-      {
-        categories.loading ? 
-        <CategoriesLoading />
-          : categories.error ? <NetworkError /> :
-        <>
-        <h3 className={styles.titleStyle}>
-          {t('homeTitle')}
-        </h3>
-        <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
-        {[...categories.data].sort((a, b) => a.level - b.level).map((category, idx) => {
-          let isLock = totalStars < (category.level-1)*5
-          let category_score = scores.length ? scores.find(
-            (score) => parseInt(score.category_id) === category?.id
-          ) : undefined;
-          return (
-              <div className={styles.cardCategory} key={idx}>
-                <IonIcon
-                  icon={bookSharp}
-                  slot="start"
-                  className={styles.iconCategory}
-                />
-                <div
-                  onClick={() => startQuiz(isLock, category)}
-                  className={styles.linkStyle}
-                >
-                  <div>
-                    <div className={styles.cardCategoryHeader}>
-                      <h1 className={styles.cardCategoryTitle}>
-                        {category?.name}
-                      </h1>
-                      {isLock && <IonIcon style={{ fontSize: "1.2em" }} icon={lockClosed} />}
-                    </div>
-                    {/* <p>{category?.description}</p> */}
-                    <p className={styles.iconCategoryContent}>
-                      {t('categoryDescription')}
-                    </p>
-                    <div className={styles.iconCategoryFooter}>
-                      <div style={{ fontSize: "1.5em" }}>
-                        {getStars(category_score?.stars ?? 0)}
-                      </div>
-                      <span><b>{category.level} </b><IonIcon icon={statsChart} /></span>
-                    </div>
-                  </div>
-                </div>
-            </div>
-          );
-        })}
-        </div>
-      </>
-      }
 
+      <IonContent fullscreen>
+        {categories.loading ? (
+          <CategoriesLoading />
+        ) : categories.error ? (
+          <NetworkError />
+        ) : (
+          <>
+            <h3 className={styles.titleStyle}>{t('homeTitle')}</h3>
+            <div className={styles.categoriesGrid}>
+              {[...categories.data]
+                .sort((a, b) => a.level - b.level)
+                .map((category, idx) => {
+                  const isLock = totalStars < (category.level - 1) * 5;
+                  const category_score = scores.length
+                    ? scores.find((score) => parseInt(score.category_id) === category?.id)
+                    : undefined;
+
+                  return (
+                    <div
+                      className={`${styles.cardCategory} ${isLock ? styles.cardLocked : ''}`}
+                      key={idx}
+                      onClick={() => startQuiz(isLock, category)}
+                    >
+                      <IonIcon
+                        icon={bookSharp}
+                        className={styles.iconCategory}
+                      />
+                      <div className={styles.linkStyle}>
+                        <div>
+                          <div className={styles.cardCategoryHeader}>
+                            <h1 className={styles.cardCategoryTitle}>{category?.name}</h1>
+                            {isLock && (
+                              <IonIcon className={styles.lockIcon} icon={lockClosed} />
+                            )}
+                          </div>
+                          <p className={styles.iconCategoryContent}>{t('categoryDescription')}</p>
+                        </div>
+                        <div className={styles.iconCategoryFooter}>
+                          <div className={styles.starsWrapper}>
+                            {getStars(category_score?.stars ?? 0)}
+                          </div>
+                          <span className={styles.levelBadge}>
+                            {category.level} <IonIcon icon={statsChart} />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </>
+        )}
       </IonContent>
+
       <IonAlert
         isOpen={showAlert}
         onDidDismiss={() => setShowAlert(false)}
-        header={starsRequired+" stars required !"}
-        message={"You need "+starsRequired+" stars to unluck this level !"}
+        header={`${starsRequired} ⭐ requis`}
+        message={`Il vous faut ${starsRequired} étoiles pour débloquer ce niveau !`}
         buttons={['OK']}
       />
     </IonPage>

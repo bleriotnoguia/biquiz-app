@@ -5,21 +5,15 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
   IonPage,
   IonProgressBar,
-  IonRadio,
-  IonRadioGroup,
-  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { checkmarkCircle, closeCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, useHistory } from "react-router";
+import { useParams, useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   addChoice,
@@ -33,6 +27,8 @@ import QuizLoading from "../home/QuizLoading";
 import FeedBack from "./FeedBack";
 import "./Quiz.css";
 
+const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
 const Quiz: React.FC = () => {
   const displaySource = useAppSelector((state) => state.setting.displaySource);
   const questions = useAppSelector((state) => state.currentQuiz.questions);
@@ -43,67 +39,43 @@ const Quiz: React.FC = () => {
   const [choiceId, setChoiceId] = useState<undefined | number>(undefined);
   const [feedBackIsOpen, setFeedBackIsOpen] = useState(false);
   const [showSource, setShowSource] = useState(false);
-  const [feedback, setFeedBack] = useState<{goodAnswer: QuestionOption, success: boolean}>()
+  const [feedback, setFeedBack] = useState<{ goodAnswer: QuestionOption; success: boolean }>();
   const dispatch = useAppDispatch();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const history = useHistory();
+  const { category_id = '' } = useParams<{ category_id: string }>();
 
-  const handleOpenModal = () => {
-    setFeedBackIsOpen(true);
-  };
+  function handleSelectOption(optionId: number) {
+    if (!questions || questions.length === 0 || !questions[questionIndex] || choiceId !== undefined) return;
 
-  const handleCloseModal = () => {
-    setFeedBackIsOpen(false);
-  };
-
-  let history = useHistory();
-
-  const { category_id } = useParams<{ category_id: string }>();
-
-  function handleSetChoiceId(choiceId: number) {
-    // Save the user choice
-    const newChoice = {
-      question_id: questions[questionIndex].id,
-      choice_id: choiceId,
-    };
-    setChoiceId(choiceId);
+    const newChoice = { question_id: questions[questionIndex].id, choice_id: optionId };
+    setChoiceId(optionId);
     dispatch(addChoice(newChoice));
 
-    let currentQuestion = questions.find(question => questions[questionIndex].id === question.id)
-    let isGoodAnswer = currentQuestion?.options.find(opt => opt.id === choiceId)?.is_correct!
-    let goodAnswer = currentQuestion?.options.find(opt => opt.is_correct === true)!
+    const currentQuestion = questions.find(q => q.id === questions[questionIndex].id);
+    const isGoodAnswer = currentQuestion?.options.find(opt => opt.id === optionId)?.is_correct ?? false;
+    const goodAnswer = currentQuestion?.options.find(opt => opt.is_correct === true)!;
 
-    setFeedBack({
-      goodAnswer, 
-      success: isGoodAnswer
-    });
-
-    handleOpenModal();
+    setFeedBack({ goodAnswer, success: isGoodAnswer });
+    setFeedBackIsOpen(true);
   }
 
   function nextQuiz() {
-    var nextQuizIndex = questionIndex + 1;
+    const nextQuizIndex = questionIndex + 1;
     if (nextQuizIndex < questions.length) {
       setQuestionIndex(nextQuizIndex);
     } else {
-      let stars_won =
-        (choices.filter((item: Choice) => checkIsCorrect(item, questions))
-          .length *
-          5) /
-        choices.length;
-      let category_score = scores.length ? scores.find(
-        (score) => score.category_id === category_id
-      ) : undefined;
-      if (
-        !category_score ||
-        (category_score && category_score.stars < stars_won)
-      ) {
+      const stars_won = choices.length > 0
+        ? (choices.filter((item: Choice) => checkIsCorrect(item, questions)).length * 5) / choices.length
+        : 0;
+      const category_score = scores.length ? scores.find(s => s.category_id === category_id) : undefined;
+      if (!category_score || category_score.stars < stars_won) {
         dispatch(setScore({ category_id, stars: stars_won }));
       }
-
-      history.push("/page/result/" + category_id);
       setQuestionIndex(0);
+      history.push('/page/result/' + category_id);
     }
-    handleCloseModal();
+    setFeedBackIsOpen(false);
     setChoiceId(undefined);
     setShowSource(false);
   }
@@ -111,6 +83,15 @@ const Quiz: React.FC = () => {
   useEffect(() => {
     dispatch(fetchQuestions({ category_id }));
   }, [dispatch, category_id]);
+
+  const currentQuestion = questions[questionIndex];
+
+  const getOptionClass = (option: QuestionOption) => {
+    if (choiceId === undefined) return 'quiz-option';
+    if (option.is_correct) return 'quiz-option correct disabled';
+    if (choiceId === option.id) return 'quiz-option wrong disabled';
+    return 'quiz-option disabled';
+  };
 
   return (
     <IonPage>
@@ -124,98 +105,70 @@ const Quiz: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        {
-          loading ?
+        {loading ? (
           <QuizLoading />
-           : <>
-              <div
-              style={{
-                padding: "1em 1em 0px 1em",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-            <IonProgressBar
-              style={{ height: "0.5em" }}
-              value={questionIndex / questions.length}
-            ></IonProgressBar>
-            </div>
-            <IonText
-              style={{
-                padding: "0px 1em 0px 1em",
-                textAlign: "center",
-                color: "#303030",
-              }}
-            >
-              <h3 style={{ fontWeight: "bold" }}>
-                {questions[questionIndex] ? questions[questionIndex].name : ""}
-              </h3>
-              <div style={{ textAlign: "center" }}>
-                {displaySource && (
-                  <IonButton onClick={() => setShowSource(!showSource)}>
-                    {showSource
-                      ? questions[questionIndex].source_text
-                      : t('displaySource')}
-                  </IonButton>
-                )}
+        ) : (
+          <>
+            {/* Progress bar */}
+            <div className="quiz-progress-wrapper">
+              <div className="quiz-progress-label">
+                <span>Progression</span>
+                <span>{questionIndex + 1} / {questions.length}</span>
               </div>
-            </IonText>
-            <IonList>
-              <IonRadioGroup value={choiceId}>
-                {questions[questionIndex] &&
-                  questions[questionIndex].options.map((option, id) => (
-                    <IonItem key={id}>
-                      <IonRadio
-                        slot="start"
-                        value={option.id}
-                        onClick={() => handleSetChoiceId(option.id)}
-                      />{" "}
-                      <IonLabel
-                        color={
-                          choiceId && option.is_correct === true
-                            ? "success"
-                            : choiceId &&
-                              choiceId === option.id &&
-                              option.is_correct === false
-                            ? "danger"
-                            : ""
-                        }
-                      >
-                        {option.name}
-                      </IonLabel>{" "}
-                      {choiceId && option.is_correct === true && (
-                        <IonIcon
-                          slot="end"
-                          color="success"
-                          icon={checkmarkCircle}
-                        />
-                      )}{" "}
-                      {choiceId &&
-                        choiceId === option.id &&
-                        option.is_correct === false && (
-                          <IonIcon slot="end" color="danger" icon={closeCircle} />
-                        )}
-                    </IonItem>
-                  ))}
-              </IonRadioGroup>
-            </IonList>
-            <IonText style={{ textAlign: "center" }}>
-              <h5
-                style={{
-                  fontWeight: "bold",
-                  backgroundColor: "lightgray",
-                  padding: "0.5em 0",
-                }}
-              >
-                Question {questionIndex + 1}/{questions.length}
-              </h5>
-            </IonText>
+              <IonProgressBar value={questions.length > 0 ? questionIndex / questions.length : 0} />
+            </div>
+
+            {/* Question card */}
+            <div className="quiz-question-card">
+              <div className="quiz-question-counter">
+                <span className="quiz-question-badge">Question {questionIndex + 1}</span>
+              </div>
+              <p className="quiz-question-text">
+                {currentQuestion?.name ?? ''}
+              </p>
+              {displaySource && (
+                <>
+                  <IonButton
+                    className="quiz-source-btn"
+                    fill="outline"
+                    size="small"
+                    onClick={() => setShowSource(!showSource)}
+                  >
+                    {showSource ? 'Masquer' : t('displaySource')}
+                  </IonButton>
+                  {showSource && (
+                    <p className="quiz-source-text">{currentQuestion?.source_text}</p>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Answer options */}
+            <div className="quiz-options">
+              {currentQuestion?.options.map((option, idx) => (
+                <div
+                  key={option.id}
+                  className={getOptionClass(option)}
+                  onClick={() => handleSelectOption(option.id)}
+                >
+                  <span className="quiz-option-letter">{LETTERS[idx]}</span>
+                  <span className="quiz-option-text">{option.name}</span>
+                  {choiceId !== undefined && option.is_correct && (
+                    <IonIcon className="quiz-option-icon" color="success" icon={checkmarkCircle} />
+                  )}
+                  {choiceId !== undefined && choiceId === option.id && !option.is_correct && (
+                    <IonIcon className="quiz-option-icon" color="danger" icon={closeCircle} />
+                  )}
+                </div>
+              ))}
+            </div>
           </>
-        }
+        )}
       </IonContent>
+
       <FeedBack
         feedback={feedback}
-        handleCloseModal={handleCloseModal}
+        handleCloseModal={() => setFeedBackIsOpen(false)}
         isOpen={feedBackIsOpen}
         nextQuiz={nextQuiz}
       />

@@ -21,7 +21,7 @@ export const getStars = (rating: number) => {
     output.push(<IonIcon icon={starSharp} key={++count} />);
 
   // If there is a half a star, append it
-  if (i == .5) output.push(<IonIcon icon={starHalfSharp} key={++count} />);
+  if (i === .5) output.push(<IonIcon icon={starHalfSharp} key={++count} />);
 
   // Fill the empty stars
   for (let i = (5 - rating); i >= 1; i--)
