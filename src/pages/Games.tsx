@@ -1,17 +1,11 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonItem, IonItemDivider, IonLabel, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { useHistory } from 'react-router';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonItem, IonItemDivider, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 import gamesList from '../data/gamesList.json'
 import '../App.css';
 
-interface gameConfig{
-  id: number;
-  title: string;
-  description: Text;
-}
-
 const Games: React.FC = () => {
 
-  let history = useHistory()
+  const history = useHistory()
 
   return (
     <IonPage>

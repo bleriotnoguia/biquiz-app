@@ -1,47 +1,53 @@
 import React from 'react';
-import {
-  IonModal,
-  IonIcon,
-  IonButton,
-} from '@ionic/react';
-import { checkmarkCircle, closeCircleSharp } from "ionicons/icons";
-
+import { IonModal, IonIcon, IonButton } from '@ionic/react';
+import { checkmarkCircle, closeCircleSharp } from 'ionicons/icons';
 import './FeedBack.css';
 import { QuestionOption } from '../../slices/currentQuizSlice';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  handleCloseModal: () => void; 
-  nextQuiz: () => void; 
+  handleCloseModal: () => void;
+  nextQuiz: () => void;
   isOpen: boolean;
-  feedback: {goodAnswer: QuestionOption, success: boolean} | undefined;
+  feedback: { goodAnswer: QuestionOption; success: boolean } | undefined;
 }
 
-const FeedBack : React.FC<Props> = (props) =>  {
-  const {t} = useTranslation();
+const FeedBack: React.FC<Props> = ({ isOpen, feedback, nextQuiz }) => {
+  const { t } = useTranslation();
+
   return (
-    <IonModal backdropDismiss={false} isOpen={props.isOpen} id="feedback-modal" >
-      <div className="wrapper">
-        <div className='feeback-header'>
-          <div style={{display: 'flex', alignItems: 'center'}}>
-            {props.feedback?.success ? <>
-              <IonIcon color={'success'} icon={checkmarkCircle} />
-              <h2>{t('goodAnswer')}</h2> 
-            </> : <>
-              <IonIcon color={'danger'} icon={closeCircleSharp} />
-              <h4>{ t('theGoodAnswerIs') + props.feedback?.goodAnswer.name }</h4>
-            </>}
+    <IonModal backdropDismiss={false} isOpen={isOpen} id="feedback-modal">
+      <div className="feedback-wrapper">
+        <div className="feedback-header">
+          <div className={`feedback-icon ${feedback?.success ? 'success' : 'danger'}`}>
+            <IonIcon icon={feedback?.success ? checkmarkCircle : closeCircleSharp} />
           </div>
-          {/* <div>
-            <IonIcon icon={flag} />
-          </div> */}
+          <div className="feedback-text">
+            {feedback?.success ? (
+              <>
+                <h2>{t('goodAnswer')}</h2>
+                <p>Continuez comme ça !</p>
+              </>
+            ) : (
+              <>
+                <h4>{t('theGoodAnswerIs')}{feedback?.goodAnswer.name}</h4>
+                <p>Vous ferez mieux la prochaine fois !</p>
+              </>
+            )}
+          </div>
         </div>
-        <div style={{textAlign: 'center'}}>
-          <IonButton color={props.feedback?.success ? 'success':'danger'} size='default' style={{width: '90%', fontWeight: 'bold', color: 'black', fontSize: '1.1em'}} onClick={props.nextQuiz}>{t('continue')}</IonButton>
-        </div>
+
+        <IonButton
+          className="feedback-continue-btn"
+          expand="block"
+          color={feedback?.success ? 'success' : 'danger'}
+          onClick={nextQuiz}
+        >
+          {t('continue')}
+        </IonButton>
       </div>
     </IonModal>
   );
-}
+};
 
 export default FeedBack;

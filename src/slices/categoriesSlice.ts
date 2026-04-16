@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { createClient } from "@supabase/supabase-js";
-import { environment } from "../environments/environment";
+import { supabase } from "../utils/supabase";
 
 export interface CategoryConfig {
   id: number;
@@ -33,11 +31,7 @@ export const fetchCategories = createAsyncThunk(
     // const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
     // console.log("supabaseUrl", process.env.REACT_APP_SUPABASE_URL);
 
-    const supabaseUrl = environment.supabaseUrl;
-    const supabaseKey = environment.supabaseKey;
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    let { data: question_categories, error } = await supabase
+    let { data: question_categories } = await supabase
       .from("question_categories")
       .select(
         "id,level,is_active,parent_id, name:question_category_translations(name)"
